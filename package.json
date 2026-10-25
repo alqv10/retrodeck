@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "keywords": ["react", "ui", "retro", "skeuomorphic", "music-player", "cassette", "turntable", "css"],
-  "repository": "github:matiasgutierrez/retrodeck",
+  "repository": "github:mmsuarezoss/retrodeck",
   "sideEffects": false,
   "files": ["dist"],
   "exports": {

@@ -169,6 +169,20 @@
   background: repeating-linear-gradient(90deg, #0b0d11 0 12px, transparent 12px 20px);
 }
 
+/* Texto moldeado en el plástico, como el "MADE IN JAPAN" de las cintas de
+   verdad: el mismo color del cuerpo, solo relieve. */
+.rd-cassette__etching {
+  position: absolute;
+  left: 50%;
+  bottom: 9px;
+  transform: translateX(-50%);
+  font-size: 6px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
 /* --- Secuencia: sale el viejo, entra el nuevo --- */
 
 .rd-cassette__tape--ejecting {

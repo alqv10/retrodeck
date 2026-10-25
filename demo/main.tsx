@@ -33,7 +33,7 @@ function Demo() {
         <span className="rail__name">retrodeck</span>
         <nav className="rail__links">
           <a href="https://www.npmjs.com/package/retrodeck">npm</a>
-          <a href="https://github.com/matiasgutierrez/retrodeck">source</a>
+          <a href="https://github.com/mmsuarezoss/retrodeck">source</a>
         </nav>
       </header>
 
@@ -56,14 +56,14 @@ function Demo() {
 
       <section className="bay">
         <div className="stage">
-          <Turntable {...player} etching="MADE BY HAND" />
+          <Turntable {...player} />
         </div>
         <div className="bay__words">
           <h2>Turntable</h2>
           <p>
             The platter spins with the track and brakes when you pause. Bump <code>spinTrigger</code> and it cues the
-            next record. Whatever you write in <code>etching</code> is grooved into the dead wax, readable once the disc
-            stops.
+            next record. Whatever you put in <code>etching</code> is grooved into the dead wax, readable once the disc stops — the
+            cassette carries the same mark, moulded into the shell.
           </p>
           <Snippet
             code={`<Turntable
@@ -71,7 +71,7 @@ function Demo() {
   isPaused={isPaused}
   remainingMs={durationMs - progressMs}
   spinTrigger={changeCount}
-  etching="MADE BY HAND"
+  etching="GRACE"
   onNext={next}
   onPrevious={previous}
   onTogglePlay={toggle}

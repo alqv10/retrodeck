@@ -9,6 +9,8 @@ interface CassetteProps {
   onNext: () => void;
   onPrevious: () => void;
   onTogglePlay: () => void;
+  /** Texto moldeado en el plástico de la cinta, abajo de los carretes. */
+  etching?: string;
 }
 
 type Phase = "idle" | "opening" | "ejecting" | "inserting" | "closing";
@@ -28,6 +30,7 @@ export function Cassette({
   onNext,
   onPrevious,
   onTogglePlay,
+  etching = "GRACE",
 }: CassetteProps) {
   const [tape, setTape] = useState({ name: albumName, art: artwork });
   const [phase, setPhase] = useState<Phase>("idle");
@@ -86,6 +89,11 @@ export function Cassette({
               <span className="rd-cassette__tape-span" aria-hidden="true" />
               <div className={`rd-cassette__reel ${reelsSpinning ? "rd-cassette__reel--spinning" : ""}`} />
             </div>
+            {etching && (
+              <span className="rd-cassette__etching" aria-hidden="true">
+                {etching}
+              </span>
+            )}
             <span className="rd-cassette__tape-head" aria-hidden="true" />
           </div>
 

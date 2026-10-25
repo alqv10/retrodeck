@@ -58,7 +58,7 @@ brakes when you pause.
 | `remainingMs` | `number` | shown on the display |
 | `isPaused` | `boolean` | |
 | `spinTrigger` | `number` | bump it and the platter brakes and cues the next record |
-| `etching` | `string?` | grooved into the dead wax, readable once the disc stops |
+| `etching` | `string?` | grooved into the dead wax, readable once the disc stops; default `"GRACE"` |
 | `brand` | `string?` | silk-screened on the plinth, default `"retrodeck"` |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
@@ -86,6 +86,7 @@ opens, the old tape ejects, the new one goes in, the lid clunks shut.
 | `albumName` | `string` | handwritten on the label |
 | `artwork` | `string` | the label's picture |
 | `albumId` | `string` | identity only: a change swaps the tape |
+| `etching` | `string?` | moulded into the tape shell, under the reels; default `"GRACE"` |
 | `isPaused` | `boolean` | |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 

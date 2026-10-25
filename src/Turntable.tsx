@@ -12,7 +12,7 @@ interface TurntableProps {
   remainingMs: number;
   /** Marca serigrafiada en el chasis. */
   brand?: string;
-  /** Mensaje grabado en el lacre del vinilo, como en los discos de verdad. Se lee con el disco quieto. */
+  /** Mensaje grabado en el lacre del vinilo, entre la etiqueta y el canto. Se lee con el disco quieto. */
   etching?: string;
 }
 
@@ -25,7 +25,7 @@ export function Turntable({
   spinTrigger,
   remainingMs,
   brand = "retrodeck",
-  etching,
+  etching = "GRACE",
 }: TurntableProps) {
   const [selecting, setSelecting] = useState(false);
 
