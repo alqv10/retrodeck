@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "keywords": ["react", "ui", "retro", "skeuomorphic", "music-player", "cassette", "turntable", "css"],
+  "homepage": "https://retrodeck-jet.vercel.app",
   "repository": "github:mmsuarezoss/retrodeck",
   "sideEffects": false,
   "files": ["dist"],
