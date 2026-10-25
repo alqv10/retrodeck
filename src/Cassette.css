@@ -1,0 +1,350 @@
+.rd-cassette {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Blue moulded-plastic body, after the QFX portable recorder. El cuerpo ya no se
+   mueve en los cambios de álbum: lo único que entra y sale es el casete. */
+.rd-cassette__deck {
+  --rd-bay-h: 168px;
+
+  position: relative;
+  /* No global border-box reset in this project */
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(var(--rd-bay-h) + 96px);
+  border-radius: 10px;
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 72%, #ffffff) 0%,
+    var(--rd-body, #1f5aa8) 38%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 62%, #000000) 100%
+  );
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.45),
+    0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* El hueco donde vive el casete: pozo oscuro con la tapa de acrílico encima */
+.rd-cassette__bay {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 12px;
+  height: var(--rd-bay-h);
+  border-radius: 5px;
+  overflow: hidden;
+  background: linear-gradient(170deg, #0b0e14 0%, #141922 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 4px 10px rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 620px;
+}
+
+/* --- El casete --- */
+
+.rd-cassette__tape {
+  position: relative;
+  box-sizing: border-box;
+  height: 84%;
+  max-width: 92%;
+  aspect-ratio: 25 / 16;
+  padding: 7px;
+  border-radius: 7px;
+  background: linear-gradient(160deg, #343a45 0%, #22262e 45%, #15181d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 8px 16px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rd-cassette__tape-label {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #ece4d3;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.rd-cassette__tape-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rd-cassette__tape-art-empty {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(135deg, #ece4d3 0 8px, #ddd3bd 8px 16px);
+}
+
+/* Franja escrita a mano sobre la portada */
+.rd-cassette__tape-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 3px 8px;
+  background: rgba(236, 228, 211, 0.93);
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: "Permanent Marker", cursive;
+  font-size: 13px;
+  line-height: 1.25;
+  color: #2a2a2a;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ventana de los carretes */
+.rd-cassette__tape-window {
+  height: 34%;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(10, 12, 16, 0.85), rgba(30, 34, 42, 0.8));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.rd-cassette__reel {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#c8ccd4 0deg 8deg, transparent 8deg 60deg);
+  box-shadow:
+    inset 0 0 0 5px #2a2f3a,
+    inset 0 0 0 6px rgba(255, 255, 255, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.rd-cassette__reel--spinning {
+  animation: rd-cassette-spin 3s linear infinite;
+}
+
+@keyframes rd-cassette-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* La cinta marrón tendida entre los dos carretes */
+.rd-cassette__tape-span {
+  flex: 1;
+  height: 9px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, #6a4a2a, #3d2a17);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Aperturas del cabezal en el canto inferior */
+.rd-cassette__tape-head {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 44%;
+  height: 4px;
+  transform: translateX(-50%);
+  border-radius: 1px;
+  background: repeating-linear-gradient(90deg, #0b0d11 0 12px, transparent 12px 20px);
+}
+
+/* --- Secuencia: sale el viejo, entra el nuevo --- */
+
+.rd-cassette__tape--ejecting {
+  animation: rd-cassette-eject 0.38s cubic-bezier(0.45, 0, 0.75, 0.1) forwards;
+}
+
+@keyframes rd-cassette-eject {
+  from {
+    transform: translateY(0) rotateX(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-82%) rotateX(-18deg);
+    opacity: 0.25;
+  }
+}
+
+.rd-cassette__tape--inserting {
+  animation: rd-cassette-insert 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes rd-cassette-insert {
+  0% {
+    transform: translateY(-82%) rotateX(-18deg);
+    opacity: 0.25;
+  }
+  70% {
+    transform: translateY(4px) rotateX(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* --- La tapa --- */
+
+.rd-cassette__lid {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: linear-gradient(160deg, rgba(126, 162, 210, 0.12) 0%, rgba(10, 14, 22, 0.26) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 2px 6px rgba(255, 255, 255, 0.12);
+  transform-origin: top center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Reflejo diagonal del acrílico */
+.rd-cassette__lid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: linear-gradient(118deg, transparent 36%, rgba(255, 255, 255, 0.16) 45%, transparent 56%);
+}
+
+.rd-cassette__lid-grip {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 54px;
+  height: 5px;
+  margin-left: -27px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #4a4f58, #22262c);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.rd-cassette__bay--open .rd-cassette__lid {
+  transform: rotateX(-104deg);
+  opacity: 0.25;
+}
+
+/* --- Cuerpo: parlante y teclas --- */
+
+.rd-cassette__speaker {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: calc(12px + var(--rd-bay-h) + 8px);
+  height: 26px;
+  border-radius: 3px;
+  background-color: color-mix(in srgb, var(--rd-body, #1f5aa8) 70%, #000000);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.6) 1.1px, transparent 1.3px);
+  background-size: 6px 6px;
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.35),
+    inset 0 2px 7px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Mechanical transport keys along the bottom of the body */
+.rd-cassette__keys {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.rd-cassette__key {
+  flex: 1;
+  height: 30px;
+  border: none;
+  border-radius: 2px 2px 4px 4px;
+  background: linear-gradient(180deg, #4a4f58 0%, #2b2f36 55%, #1a1d22 100%);
+  color: #d8dce4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* The flat 0 3px 0 is the key's side wall — it collapses on press */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+    0 3px 0 #0f1115,
+    0 4px 6px rgba(0, 0, 0, 0.45);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.rd-cassette__key:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+    0 0 0 #0f1115,
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.rd-cassette__key--play {
+  flex: 1.3;
+  background: linear-gradient(180deg, #f0d49a 0%, var(--rd-accent, #e3b765) 55%, #b98847 100%);
+  color: #1a1308;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25),
+    0 3px 0 #7d5a2b,
+    0 4px 6px rgba(0, 0, 0, 0.45);
+}
+
+.rd-cassette__key--play:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.25),
+    0 0 0 #7d5a2b,
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-height: 760px) {
+  .rd-cassette__deck {
+    --rd-bay-h: 132px;
+  }
+
+  .rd-cassette__reel {
+    width: 24px;
+    height: 24px;
+  }
+
+  .rd-cassette__tape-title {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-cassette__reel--spinning,
+  .rd-cassette__tape--ejecting,
+  .rd-cassette__tape--inserting {
+    animation: none;
+  }
+
+  .rd-cassette__lid {
+    transition: none;
+  }
+}

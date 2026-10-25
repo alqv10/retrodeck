@@ -1,0 +1,308 @@
+/* Discman azul de plástico brillante: cuerpo redondo, visor plateado arriba,
+   el disco montado al centro y los botoncitos abajo. */
+.rd-cd-player {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.rd-cd-player__body {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 290px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--rd-body, #1f5aa8) 78%, #ffffff) 0%,
+      var(--rd-body, #1f5aa8) 42%,
+      color-mix(in srgb, var(--rd-body, #1f5aa8) 52%, #000000) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 -10px 22px rgba(0, 0, 0, 0.5),
+    0 12px 26px rgba(0, 0, 0, 0.5);
+}
+
+/* Anillo plateado del canto, como el del equipo real */
+.rd-cd-player__body::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(216, 224, 236, 0.28);
+  pointer-events: none;
+}
+
+/* Visor: bisel plateado con la pantallita verdosa adentro */
+.rd-cd-player__lcd {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  width: 54%;
+  padding: 6px 10px;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #cdd4de 0%, #949caa 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 5px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.rd-cd-player__lcd-track,
+.rd-cd-player__lcd-artist {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color: #1d2a1f;
+}
+
+.rd-cd-player__lcd-track {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.rd-cd-player__lcd-artist {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+/* Pozo de la bandeja: el disco entra y sale de acá y la tapa lo cubre */
+.rd-cd-player__well {
+  position: absolute;
+  top: 26%;
+  left: 19%;
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #1b2130 0%, #0a0d14 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 4px 10px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 560px;
+}
+
+/* El CD montado en el eje */
+.rd-cd-player__disc {
+  position: relative;
+  width: 90%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #15181d;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 6px 14px rgba(0, 0, 0, 0.55);
+}
+
+.rd-cd-player__disc img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Tornasol del policarbonato */
+.rd-cd-player__sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 210deg,
+    rgba(255, 90, 90, 0.3),
+    rgba(255, 234, 120, 0.3),
+    rgba(120, 255, 180, 0.3),
+    rgba(120, 190, 255, 0.3),
+    rgba(220, 130, 255, 0.3),
+    rgba(255, 90, 90, 0.3)
+  );
+  /* El tornasol vive en el aro de policarbonato; sobre la portada impresa no
+     hay brillo, así que el centro va enmascarado. */
+  mask-image: radial-gradient(circle, transparent 40%, #000 62%);
+  mix-blend-mode: screen;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Aro del centro y agujero del eje */
+.rd-cd-player__hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24%;
+  height: 24%;
+  margin: -12% 0 0 -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #101216 0 32%, rgba(226, 232, 240, 0.85) 33% 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.rd-cd-player__disc--spinning {
+  animation: rd-cd-spin 1.6s linear infinite;
+}
+
+@keyframes rd-cd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Tapa de acrílico ahumado. No intercepta el arrastre del disco. */
+.rd-cd-player__lid {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 24%, rgba(226, 240, 255, 0.3) 0%, rgba(226, 240, 255, 0) 46%),
+    linear-gradient(145deg, rgba(190, 215, 245, 0.16) 0%, rgba(12, 18, 30, 0.34) 72%);
+  /* El aro plateado es lo que delata si la tapa está puesta o no */
+  box-shadow:
+    inset 0 0 0 3px rgba(222, 232, 246, 0.5),
+    inset 0 0 0 4px rgba(0, 0, 0, 0.35),
+    inset 0 3px 10px rgba(255, 255, 255, 0.14);
+  transform-origin: top center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Reflejo del plástico */
+.rd-cd-player__lid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(118deg, transparent 34%, rgba(255, 255, 255, 0.18) 45%, transparent 58%);
+}
+
+/* Pestaña del cierre, abajo de la tapa */
+.rd-cd-player__latch {
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  width: 6%;
+  height: 16%;
+  margin-top: -8%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #dfe5ee, #8f97a6);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.rd-cd-player__lid--open {
+  transform: rotateX(-108deg);
+  opacity: 0.2;
+}
+
+/* El disco viejo sale y el nuevo baja al eje */
+.rd-cd-player__disc--ejecting {
+  animation: rd-cd-eject 0.38s cubic-bezier(0.45, 0, 0.75, 0.1) forwards;
+}
+
+@keyframes rd-cd-eject {
+  from {
+    transform: translateY(0) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-78%) rotateX(-20deg) scale(0.94);
+    opacity: 0.2;
+  }
+}
+
+.rd-cd-player__disc--inserting {
+  animation: rd-cd-insert 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes rd-cd-insert {
+  0% {
+    transform: translateY(-78%) rotateX(-20deg) scale(0.94);
+    opacity: 0.2;
+  }
+  70% {
+    transform: translateY(3px) rotateX(5deg) scale(1.01);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Botonera plateada abajo */
+.rd-cd-player__controls {
+  position: absolute;
+  bottom: 9%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rd-cd-player__button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #eef1f6 0%, #b6bdc9 55%, #767e8c 100%);
+  color: #1b2030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 5px rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.rd-cd-player__button--play {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle at 34% 28%, #fbe6b4 0%, var(--rd-accent, #e3b765) 52%, #b98847 100%);
+}
+
+.rd-cd-player__button:active {
+  transform: translateY(2px) scale(0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Serigrafía del canto */
+.rd-cd-player__badge {
+  position: absolute;
+  bottom: 3.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-cd-player__disc--spinning,
+  .rd-cd-player__disc--ejecting,
+  .rd-cd-player__disc--inserting {
+    animation: none;
+  }
+
+  .rd-cd-player__lid {
+    transition: none;
+  }
+}

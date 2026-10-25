@@ -1,0 +1,244 @@
+/* iPod classic 6th gen: anodised aluminium chassis holding a glossy black screen
+   and a light grey click wheel. */
+.rd-pocket {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 14px 20px;
+  border-radius: 14px;
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 7%, #fbfbfc) 0%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 14%, #dcdde0) 28%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 20%, #c3c5ca) 70%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 26%, #aeb0b6) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.18),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.12),
+    0 10px 22px rgba(0, 0, 0, 0.45);
+}
+
+.rd-pocket__screen {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 10px 12px 12px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #121214 0%, #050506 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* The diagonal reflection across the glass */
+.rd-pocket__screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 32%, transparent 33%);
+  pointer-events: none;
+}
+
+.rd-pocket__brand {
+  margin: 0 0 4px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6f7076;
+}
+
+.rd-pocket__track {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f2f2f4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rd-pocket__artist {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: #a9aab0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Barra de la pantalla: cuánto lleva y cuánto falta, como el iPod */
+.rd-pocket__progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rd-pocket__elapsed,
+.rd-pocket__remaining {
+  font-size: 9px;
+  color: #8b8c92;
+  font-variant-numeric: tabular-nums;
+}
+
+.rd-pocket__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #27282d;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.rd-pocket__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #b9dcff 0%, #4a9ae8 100%);
+}
+
+.rd-wheel {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 5%, #fdfdfd) 0%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 10%, #ececed) 45%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 15%, #dcdcde) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(255, 255, 255, 0.6);
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.rd-wheel--dragging {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.16),
+    inset 0 -2px 7px rgba(0, 0, 0, 0.16);
+}
+
+.rd-wheel__label {
+  position: absolute;
+  color: #88888e;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The three glyphs are real controls, so they take presses and a touch-sized box.
+   Offsets are reduced by the padding to keep the glyphs where they were. */
+button.rd-wheel__label {
+  padding: 7px 9px;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  line-height: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+button.rd-wheel__label svg {
+  display: block;
+}
+
+button.rd-wheel__label:active {
+  color: #55555c;
+}
+
+.rd-wheel__label--top {
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rd-wheel__label--left {
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rd-wheel__label--right {
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rd-wheel__label--bottom {
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+/* Centre button: same grey as the wheel, very slightly recessed — the real one
+   carries no glyph, the play/pause mark sits on the wheel's bottom edge. */
+.rd-wheel__play {
+  position: absolute;
+  inset: 29%;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(180deg, #f4f4f5 0%, #e3e3e5 60%, #d6d6d9 100%);
+  color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(0, 0, 0, 0.13),
+    0 1px 3px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.12s ease;
+}
+
+.rd-wheel__play svg {
+  display: none;
+}
+
+.rd-wheel__play:active {
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.16);
+}
+
+.rd-wheel__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: rd-wheel-pulse 0.5s ease-out;
+}
+
+@keyframes rd-wheel-pulse {
+  from {
+    opacity: 0.5;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    opacity: 0;
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media (max-height: 700px) {
+  .rd-wheel {
+    width: 150px;
+    height: 150px;
+  }
+}

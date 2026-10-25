@@ -1,0 +1,41 @@
+{
+  "name": "retrodeck",
+  "version": "0.1.0",
+  "description": "Four retro music-player chassis as React components: click wheel, turntable, discman and cassette deck. Pure CSS, mechanical sound, zero dependencies.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": ["react", "ui", "retro", "skeuomorphic", "music-player", "cassette", "turntable", "css"],
+  "repository": "github:matiasgutierrez/retrodeck",
+  "sideEffects": false,
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./retrodeck.css": "./dist/retrodeck.css",
+    "./*.css": "./dist/*.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
+    "build:demo": "vite build",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "lint": "oxlint",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.88.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
+  }
+}

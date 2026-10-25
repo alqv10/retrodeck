@@ -1,0 +1,265 @@
+/* Hoja de catálogo de equipo de audio: panel oscuro, serigrafía hueso y los
+   aparatos como únicos objetos con color. */
+:root {
+  --ground: #131417;
+  --panel: #1b1d22;
+  --edge: #2a2d34;
+  --bone: #d7d3ca;
+  --muted: #868b96;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--bone);
+  font-family: "Chivo", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px 136px;
+}
+
+code,
+.snippet {
+  font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+/* Riel de arriba, como la tapa de un rack */
+.rail {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 18px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.rail__name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.rail__links {
+  display: flex;
+  gap: 20px;
+}
+
+.rail__links a,
+.foot a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.rail__links a:hover,
+.rail__links a:focus-visible,
+.foot a:hover {
+  color: var(--bone);
+  border-bottom-color: var(--rd-accent);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 56px;
+  align-items: center;
+  padding: 72px 0 80px;
+}
+
+h1 {
+  margin: 0 0 20px;
+  max-width: 18ch;
+  font-size: clamp(2.4rem, 6vw, 3.9rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.hero__lead {
+  margin: 0 0 28px;
+  max-width: 54ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hero__hint {
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.snippet {
+  margin: 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: #0d0e11;
+  color: #c6cbd4;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* El aparato vive en un hueco del panel, como en la vitrina de una disquería */
+.stage {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--panel) 0%, #15171b 100%);
+}
+
+.stage--wheel {
+  max-width: 272px;
+}
+
+.bay {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+  padding: 48px 0;
+  border-top: 1px solid var(--edge);
+}
+
+.bay--flip .stage {
+  order: 2;
+}
+
+.bay__words h2,
+.paint h2 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.bay__words p,
+.paint p {
+  margin: 0 0 20px;
+  max-width: 58ch;
+  color: var(--muted);
+}
+
+.bay__words code,
+.paint code {
+  color: var(--bone);
+  font-size: 0.86em;
+}
+
+.paint {
+  padding: 48px 0;
+  border-top: 1px solid var(--edge);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 28px 0 0;
+  border-top: 1px solid var(--edge);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* Panel de control fijo abajo: los colores del plástico, como el frente de un
+   equipo. */
+.panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 32px;
+  padding: 12px 24px;
+  border-top: 1px solid var(--edge);
+  background: rgba(19, 20, 23, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.panel__group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel__label {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.panel__swatches {
+  display: flex;
+  gap: 8px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+
+.swatch--on {
+  outline: 2px solid var(--bone);
+  outline-offset: 2px;
+}
+
+.panel__sound {
+  margin-left: auto;
+  padding: 7px 14px;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--bone);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.panel__sound:hover {
+  border-color: var(--rd-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--rd-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .hero,
+  .bay {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .hero {
+    padding: 48px 0 56px;
+  }
+
+  .bay--flip .stage {
+    order: 0;
+  }
+
+  .panel__sound {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,9 @@
+/*
+ * Valores de fábrica. Las carcasas derivan todo su color de estas dos
+ * variables con color-mix, cada una en su material; redefinilas donde quieras
+ * (:root, un contenedor, el propio aparato) y el plástico cambia solo.
+ */
+:root {
+  --rd-accent: #e3b765;
+  --rd-body: #1f5aa8;
+}
