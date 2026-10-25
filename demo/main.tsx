@@ -33,7 +33,7 @@ function Demo() {
         <span className="rail__name">retrodeck</span>
         <nav className="rail__links">
           <a href="https://www.npmjs.com/package/retrodeck">npm</a>
-          <a href="https://github.com/mmsuarezoss/retrodeck">source</a>
+          <a href="https://github.com/mmsuarez-oss/retrodeck">source</a>
         </nav>
       </header>
 

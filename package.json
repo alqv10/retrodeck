@@ -6,7 +6,7 @@
   "type": "module",
   "keywords": ["react", "ui", "retro", "skeuomorphic", "music-player", "cassette", "turntable", "css"],
   "homepage": "https://retrodeck-jet.vercel.app",
-  "repository": "github:mmsuarezoss/retrodeck",
+  "repository": "github:mmsuarez-oss/retrodeck",
   "sideEffects": false,
   "files": ["dist"],
   "exports": {
