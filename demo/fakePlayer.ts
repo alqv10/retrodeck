@@ -22,9 +22,12 @@ const TRACKS = [
 /**
  * Un reproductor de mentira, con la misma forma que uno de verdad: las carcasas
  * no saben de dónde sale el audio. No suena música, solo los ruidos mecánicos.
+ *
+ * Uno por aparato: con un estado compartido, tocar "siguiente" en cualquiera
+ * los movía a todos y los cuatro disparaban sus ruidos encima.
  */
-export function useFakePlayer() {
-  const [index, setIndex] = useState(0);
+export function useFakePlayer(startIndex = 0) {
+  const [index, setIndex] = useState(startIndex);
   const [isPaused, setPaused] = useState(true);
   const [progressMs, setProgress] = useState(0);
   // La tornamesa frena y arranca el plato cuando este número cambia.

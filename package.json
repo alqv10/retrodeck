@@ -17,7 +17,7 @@
   "homepage": "https://retrodeck-jet.vercel.app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mmsuarez-oss/retrodeck.git"
+    "url": "git+https://github.com/alqv10/retrodeck.git"
   },
   "sideEffects": false,
   "files": [

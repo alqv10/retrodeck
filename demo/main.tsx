@@ -17,7 +17,12 @@ function Snippet({ code }: { code: string }) {
 }
 
 function Demo() {
-  const player = useFakePlayer();
+  // Uno por aparato: cada carcasa con su propia cinta y su propio silencio.
+  const wheel = useFakePlayer(0);
+  const turntable = useFakePlayer(1);
+  const discman = useFakePlayer(2);
+  const cassette = useFakePlayer(3);
+  const wheelBay = useFakePlayer(1);
   const [plastic, setPlastic] = useState(PLASTICS[0]);
   const [accent, setAccent] = useState(ACCENTS[0]);
   const [sound, setSound] = useState(true);
@@ -33,7 +38,7 @@ function Demo() {
         <span className="rail__name">retrodeck</span>
         <nav className="rail__links">
           <a href="https://www.npmjs.com/package/retrodeck">npm</a>
-          <a href="https://github.com/mmsuarez-oss/retrodeck">source</a>
+          <a href="https://github.com/alqv10/retrodeck">source</a>
         </nav>
       </header>
 
@@ -49,14 +54,14 @@ function Demo() {
         </div>
         <div className="hero__object">
           <div className="stage stage--wheel">
-            <Wheel {...player} brand="retrodeck" />
+            <Wheel {...wheel} brand="retrodeck" />
           </div>
         </div>
       </section>
 
       <section className="bay">
         <div className="stage">
-          <Turntable {...player} />
+          <Turntable {...turntable} />
         </div>
         <div className="bay__words">
           <h2>Turntable</h2>
@@ -82,7 +87,7 @@ function Demo() {
 
       <section className="bay bay--flip">
         <div className="stage">
-          <CdPlayer {...player} />
+          <CdPlayer {...discman} />
         </div>
         <div className="bay__words">
           <h2>Discman</h2>
@@ -108,7 +113,7 @@ function Demo() {
 
       <section className="bay">
         <div className="stage">
-          <Cassette {...player} />
+          <Cassette {...cassette} />
         </div>
         <div className="bay__words">
           <h2>Cassette deck</h2>
@@ -132,7 +137,7 @@ function Demo() {
 
       <section className="bay">
         <div className="stage stage--wheel">
-          <Wheel {...player} brand="your app" />
+          <Wheel {...wheelBay} brand="your app" />
         </div>
         <div className="bay__words">
           <h2>Click wheel</h2>
