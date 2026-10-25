@@ -263,3 +263,22 @@ h1 {
     margin-left: 0;
   }
 }
+
+/* Vista para grabar: el aparato solo sobre el panel, sin nada alrededor.
+   ?capture=wheel|turntable|cd|cassette, o ?capture a secas para los cuatro. */
+.capture {
+  min-height: 100vh;
+  display: grid;
+  grid-auto-flow: column;
+  place-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+}
+
+.capture .stage {
+  width: 300px;
+  border: none;
+  background: none;
+  padding: 0;
+}

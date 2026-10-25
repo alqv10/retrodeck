@@ -1,4 +1,4 @@
-import { StrictMode, useState, type CSSProperties } from "react";
+import { StrictMode, useState, type CSSProperties, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { Cassette, CdPlayer, setSfxVolume, Turntable, Wheel } from "../src/index.ts";
 import "../src/retrodeck.css";
@@ -30,6 +30,29 @@ function Demo() {
   function toggleSound() {
     setSfxVolume(sound ? 0 : 0.6);
     setSound(!sound);
+  }
+
+  // ?capture=cassette deja un solo aparato sobre el fondo y nada más, para
+  // grabar el GIF sin titulares ni bloques de código alrededor. Sin valor,
+  // salen los cuatro en fila.
+  const capture = new URLSearchParams(location.search).get("capture");
+  if (capture !== null) {
+    const decks: Record<string, ReactNode> = {
+      wheel: <Wheel {...wheel} brand="retrodeck" />,
+      turntable: <Turntable {...turntable} />,
+      cd: <CdPlayer {...discman} />,
+      cassette: <Cassette {...cassette} />,
+    };
+    const shown = capture in decks ? [capture] : Object.keys(decks);
+    return (
+      <div className="capture" style={{ "--rd-body": plastic, "--rd-accent": accent } as CSSProperties}>
+        {shown.map((k) => (
+          <div key={k} className={k === "wheel" ? "stage stage--wheel" : "stage"}>
+            {decks[k]}
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (
