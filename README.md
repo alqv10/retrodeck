@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/retrodeck?color=%23e3b765&labelColor=%23131417)](https://www.npmjs.com/package/retrodeck) [![license](https://img.shields.io/npm/l/retrodeck?color=%23e3b765&labelColor=%23131417)](./LICENSE)
 
+![Las cuatro carcasas: rueda, tornamesa, discman y casete](https://raw.githubusercontent.com/alqv10/retrodeck/main/docs/retrodeck.png)
+
 Four retro music-player chassis as React components: a click wheel, a turntable, a
 discman and a cassette deck. Pure CSS — no images, no canvas, no dependencies —
 with the mechanical sounds that go with them.
