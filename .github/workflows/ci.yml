@@ -1,0 +1,24 @@
+# Lo mismo que corre en la máquina antes de commitear, para que un PR ajeno
+# no tenga que adivinar si rompió algo.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx tsc -p tsconfig.json --noEmit
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run build:demo
