@@ -23,4 +23,17 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm test
-      - run: npm publish --access public
+      # Una versión publicada no se puede volver a publicar. Sin esto, cualquier
+      # tag sobre una versión que ya salió deja el workflow en rojo sin que haya
+      # nada roto.
+      - id: version
+        run: |
+          v=$(node -p "require('./package.json').version")
+          if npm view "retrodeck@$v" version >/dev/null 2>&1; then
+            echo "ya publicada: $v"
+            echo "nueva=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "nueva=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.version.outputs.nueva == 'true'
+        run: npm publish --access public
