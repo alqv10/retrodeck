@@ -4,6 +4,8 @@ Four retro music-player chassis as React components: a click wheel, a turntable,
 discman and a cassette deck. Pure CSS — no images, no canvas, no dependencies —
 with the mechanical sounds that go with them.
 
+**[See them running](https://retrodeck-jet.vercel.app)** — drag the wheel, change the plastic.
+
 The components know nothing about where the audio comes from. You pass the track,
 the artwork and three callbacks; they do the plastic.
 
