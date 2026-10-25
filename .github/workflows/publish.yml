@@ -1,0 +1,26 @@
+# Publica en npm al pushear un tag vX.Y.Z. Sin tokens: npm confía en la identidad
+# que GitHub firma para este workflow (OIDC), y por eso hace falta id-token.
+# Requiere configurar el trusted publisher en la página del paquete en npmjs.com,
+# apuntando a este repo y a este archivo.
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm test
+      - run: npm publish --access public
