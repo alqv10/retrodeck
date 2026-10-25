@@ -70,6 +70,8 @@ brakes when you pause.
 
 ### `<CdPlayer>`
 
+![Changing albums on the discman: the lid lifts, the disc swaps, the motor spins back up](https://raw.githubusercontent.com/alqv10/retrodeck/main/docs/discman.gif)
+
 A round glossy discman. A new `albumId` lifts the lid, ejects the old disc, drops
 the new one in and spins the motor back up; skipping inside the same album just
 revs the motor.
@@ -83,6 +85,8 @@ revs the motor.
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
 ### `<Cassette>`
+
+![Changing albums on the cassette deck: the lid opens, the tape ejects, a new one goes in](https://raw.githubusercontent.com/alqv10/retrodeck/main/docs/cassette.gif)
 
 A moulded-plastic deck. The deck stays put; only the tape changes — the lid
 opens, the old tape ejects, the new one goes in, the lid clunks shut.
