@@ -242,3 +242,11 @@ button.rd-wheel__label:active {
     height: 150px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  /* El pulso es puro acuse de recibo del giro: sin animación no tiene nada que
+     mostrar, así que se saca del todo. */
+  .rd-wheel__pulse {
+    display: none;
+  }
+}
