@@ -4,11 +4,25 @@
   "description": "Four retro music-player chassis as React components: click wheel, turntable, discman and cassette deck. Pure CSS, mechanical sound, zero dependencies.",
   "license": "MIT",
   "type": "module",
-  "keywords": ["react", "ui", "retro", "skeuomorphic", "music-player", "cassette", "turntable", "css"],
+  "keywords": [
+    "react",
+    "ui",
+    "retro",
+    "skeuomorphic",
+    "music-player",
+    "cassette",
+    "turntable",
+    "css"
+  ],
   "homepage": "https://retrodeck-jet.vercel.app",
-  "repository": "github:mmsuarez-oss/retrodeck",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmsuarez-oss/retrodeck.git"
+  },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
