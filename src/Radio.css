@@ -1,0 +1,274 @@
+/* Radio de mesa de los sesenta: caja de madera, vidrio de dial con la escala
+   impresa, tela de parlante y dos perillas. La madera es el único material que
+   no deriva del plástico: --rd-body solo la tiñe. */
+.rd-radio {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.rd-radio__case {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 320px;
+  padding: 12px;
+  border-radius: 10px 10px 6px 6px;
+  background:
+    repeating-linear-gradient(
+      92deg,
+      rgba(0, 0, 0, 0.055) 0 2px,
+      rgba(255, 255, 255, 0.03) 2px 3px,
+      rgba(0, 0, 0, 0) 3px 7px
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--rd-body, #1f5aa8) 16%, #8a5a33) 0%,
+      color-mix(in srgb, var(--rd-body, #1f5aa8) 22%, #6b4124) 46%,
+      color-mix(in srgb, var(--rd-body, #1f5aa8) 28%, #462915) 100%
+    ),
+    #6b4124;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.35),
+    0 12px 26px rgba(0, 0, 0, 0.5);
+}
+
+/* El vidrio del dial: fondo crema iluminado por detrás, como una radio prendida */
+.rd-radio__dial {
+  position: relative;
+  height: 86px;
+  padding: 7px 10px 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 120%, rgba(255, 236, 180, 0.55) 0%, rgba(255, 236, 180, 0) 62%),
+    linear-gradient(180deg, #f3ead3 0%, #ded2b4 55%, #c8bb9b 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+    inset 0 2px 6px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Reflejo diagonal del vidrio */
+.rd-radio__dial::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.08) 30%, transparent 31%);
+  pointer-events: none;
+}
+
+.rd-radio__scale {
+  position: relative;
+  height: 20px;
+  border-bottom: 1px solid rgba(60, 40, 18, 0.55);
+  /* Las rayitas finas entre número y número */
+  background-image: repeating-linear-gradient(90deg, rgba(60, 40, 18, 0.5) 0 1px, transparent 1px 5.2px);
+  background-position: bottom;
+  background-size: 100% 6px;
+  background-repeat: repeat-x;
+}
+
+.rd-radio__mark {
+  position: absolute;
+  bottom: 7px;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #4a3317;
+}
+
+.rd-radio__needle {
+  position: absolute;
+  top: 7px;
+  height: 34px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, #d4342b 0%, #92201a 100%);
+  box-shadow: 0 0 6px rgba(212, 52, 43, 0.75);
+  transition: left 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
+}
+
+/* Mientras barre el dial tiembla, como la aguja de verdad al pasar emisoras */
+.rd-radio__needle--tuning {
+  animation: rd-radio-wobble 110ms linear infinite;
+}
+
+@keyframes rd-radio-wobble {
+  0%,
+  100% {
+    transform: translateX(-0.6px);
+  }
+  50% {
+    transform: translateX(0.6px);
+  }
+}
+
+.rd-radio__station {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: center;
+}
+
+.rd-radio__station-name {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #33240f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rd-radio__station-artist {
+  min-height: 11px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b5733;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rd-radio__brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3px;
+  text-align: center;
+  font-size: 7px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #7a6440;
+}
+
+.rd-radio__front {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 62px;
+  gap: 10px;
+  align-items: stretch;
+  margin-top: 11px;
+}
+
+/* Tela del parlante: trama cruzada sobre el hueco oscuro */
+.rd-radio__grille {
+  height: 92px;
+  border-radius: 4px;
+  background-color: color-mix(in srgb, var(--rd-body, #1f5aa8) 12%, #c6b393);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(40, 26, 10, 0.5) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgba(40, 26, 10, 0.42) 0 1px, transparent 1px 3px);
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.38),
+    inset 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.rd-radio__right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Perilla de sintonía: la misma mecánica que la rueda, en metal estriado */
+.rd-radio__knob {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  touch-action: none;
+  cursor: grab;
+  background: radial-gradient(circle at 34% 28%, #6d7278 0%, #43474d 52%, #24272b 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 -3px 7px rgba(0, 0, 0, 0.6),
+    0 3px 7px rgba(0, 0, 0, 0.5);
+}
+
+.rd-radio__knob--dragging {
+  cursor: grabbing;
+}
+
+.rd-radio__knob-face {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* El estriado del canto, que es lo que deja ver que la perilla gira */
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.12) 0deg 3deg,
+    rgba(0, 0, 0, 0.22) 3deg 6deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%);
+  mask: radial-gradient(circle, transparent 58%, #000 60%);
+  transition: transform 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
+}
+
+.rd-radio__knob-notch {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 3px;
+  height: 11px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--rd-accent, #e3b765) 85%, #ffffff);
+}
+
+/* Botón de encendido, con su lamparita */
+.rd-radio__power {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(circle at 34% 28%, #585c63 0%, #35383d 60%, #1c1e21 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.rd-radio__power:active {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.rd-radio__lamp {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #4a3a22;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rd-radio__power--on .rd-radio__lamp {
+  background: color-mix(in srgb, var(--rd-accent, #e3b765) 92%, #ffffff);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--rd-accent, #e3b765) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-radio__needle,
+  .rd-radio__knob-face {
+    transition: none;
+  }
+
+  .rd-radio__needle--tuning {
+    animation: none;
+  }
+}

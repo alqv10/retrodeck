@@ -1,6 +1,6 @@
 import { StrictMode, useState, type CSSProperties, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
-import { Cassette, CdPlayer, setSfxVolume, Turntable, Wheel } from "../src/index.ts";
+import { Cassette, CdPlayer, Radio, setSfxVolume, Turntable, Wheel } from "../src/index.ts";
 import "../src/retrodeck.css";
 import "./demo.css";
 import { cover, useFakePlayer } from "./fakePlayer.ts";
@@ -16,7 +16,7 @@ function Snippet({ code }: { code: string }) {
   );
 }
 
-const DECKS = ["cassette", "cd", "turntable", "wheel"] as const;
+const DECKS = ["cassette", "cd", "turntable", "wheel", "radio"] as const;
 type DeckName = (typeof DECKS)[number];
 
 /**
@@ -74,9 +74,19 @@ function Bench() {
         brand={mark || "retrodeck"}
       />
     ),
+    radio: (
+      <Radio
+        {...common}
+        trackName={tape.track}
+        artist={tape.artist}
+        trackId={`${tape.album}-${player.trackId}`}
+        brand={mark || "retrodeck"}
+      />
+    ),
   };
 
-  const code = `<${deck === "cd" ? "CdPlayer" : deck === "wheel" ? "Wheel" : deck === "cassette" ? "Cassette" : "Turntable"}
+  const component = { cd: "CdPlayer", wheel: "Wheel", cassette: "Cassette", turntable: "Turntable", radio: "Radio" }[deck];
+  const code = `<${component}
   ${deck === "cassette" ? `albumName="${tape.album}"\n  ` : ""}${deck === "wheel" || deck === "cd" ? `trackName="${tape.track}"\n  artist="${tape.artist}"\n  ` : ""}${deck === "cassette" || deck === "turntable" ? `etching="${mark}"` : deck === "cd" ? `badge="${mark} · DIGITAL AUDIO"` : `brand="${mark}"`}
   style={{ "--rd-body": "${body}" }}
   …
@@ -162,6 +172,7 @@ function Demo() {
   const turntable = useFakePlayer(1);
   const discman = useFakePlayer(2);
   const cassette = useFakePlayer(3);
+  const radio = useFakePlayer(1);
   const wheelBay = useFakePlayer(1);
   const [plastic, setPlastic] = useState(PLASTICS[0]);
   const [accent, setAccent] = useState(ACCENTS[0]);
@@ -174,7 +185,7 @@ function Demo() {
 
   // ?capture=cassette deja un solo aparato sobre el fondo y nada más, para
   // grabar el GIF sin titulares ni bloques de código alrededor. Sin valor,
-  // salen los cuatro en fila.
+  // salen los cinco en fila.
   const capture = new URLSearchParams(location.search).get("capture");
   if (capture !== null) {
     const decks: Record<string, ReactNode> = {
@@ -182,6 +193,7 @@ function Demo() {
       turntable: <Turntable {...turntable} />,
       cd: <CdPlayer {...discman} />,
       cassette: <Cassette {...cassette} />,
+      radio: <Radio {...radio} />,
     };
     const shown = capture in decks ? [capture] : Object.keys(decks);
     return (
@@ -209,7 +221,7 @@ function Demo() {
         <div className="hero__words">
           <h1>Players that feel like objects.</h1>
           <p className="hero__lead">
-            Four chassis as React components: click wheel, turntable, discman, cassette deck. Pure CSS, mechanical
+            Five chassis as React components: click wheel, turntable, discman, cassette deck, dial radio. Pure CSS, mechanical
             sound, no dependencies. You bring the audio.
           </p>
           <Snippet code="npm i retrodeck" />
@@ -298,6 +310,33 @@ function Demo() {
         </div>
       </section>
 
+      <section className="bay bay--flip">
+        <div className="stage">
+          <Radio {...radio} />
+        </div>
+        <div className="bay__words">
+          <h2>Dial radio</h2>
+          <p>
+            Every track is a station: the id hashes to a fixed spot on the dial, so the needle always comes back to the
+            same place. A new <code>trackId</code> sweeps it across and bursts the static while it travels — white noise
+            through a narrow bandpass, synthesised, nothing to download. The knob is the click wheel's own drag
+            mechanic: turn it to tune, or focus it and use the arrow keys.
+          </p>
+          <Snippet
+            code={`<Radio
+  trackId={track.id}
+  trackName={track.name}
+  artist={track.artist}
+  isPaused={isPaused}
+  brand="retrodeck"
+  onNext={next}
+  onPrevious={previous}
+  onTogglePlay={toggle}
+/>`}
+          />
+        </div>
+      </section>
+
       <section className="bay">
         <div className="stage stage--wheel">
           <Wheel {...wheelBay} brand="your app" />
@@ -327,7 +366,7 @@ function Demo() {
       <Bench />
 
       <section className="paint">
-        <h2>Two variables paint all four</h2>
+        <h2>Two variables paint all five</h2>
         <p>
           Every chassis mixes its colour from <code>--rd-body</code> and <code>--rd-accent</code>, each in its own
           material: saturated plastic, dark lacquer, brushed aluminium. Set them anywhere above the player.

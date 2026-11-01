@@ -4,9 +4,9 @@
 
 ![The four chassis: click wheel, turntable, discman and cassette deck](https://raw.githubusercontent.com/alqv10/retrodeck/main/docs/retrodeck.png)
 
-Four retro music-player chassis as React components: a click wheel, a turntable, a
-discman and a cassette deck. Pure CSS — no images, no canvas, no dependencies —
-with the mechanical sounds that go with them.
+Five retro music-player chassis as React components: a click wheel, a turntable, a
+discman, a cassette deck and a dial radio. Pure CSS — no images, no canvas, no
+dependencies — with the mechanical sounds that go with them.
 
 **[See them running](https://retrodeck-jet.vercel.app)** — drag the wheel, change the plastic.
 
@@ -37,7 +37,7 @@ import "retrodeck/retrodeck.css";
 Every chassis is `width: 100%`, so it fills whatever box you put it in. Give it
 somewhere between 250 and 320 px and it looks like the real thing.
 
-## The four
+## The five
 
 ### `<Wheel>`
 
@@ -52,6 +52,9 @@ glass can't skip your song; every 10° is a detent click, every 40° a track.
 | `isPaused` | `boolean` | |
 | `brand` | `string?` | the line above the track, default `"retrodeck"` |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
+
+The wheel also takes focus: with it focused, the arrow keys change track and space
+plays.
 
 ### `<Turntable>`
 
@@ -81,6 +84,7 @@ revs the motor.
 | `artwork` | `string` | printed on the disc |
 | `albumId`, `trackId` | `string` | identity only: a change drives the animation |
 | `trackName`, `artist` | `string` | on the LCD |
+| `badge` | `string?` | silk-screened under the controls, default `"COMPACT DISC · DIGITAL AUDIO"` |
 | `isPaused` | `boolean` | |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
@@ -97,13 +101,41 @@ opens, the old tape ejects, the new one goes in, the lid clunks shut.
 | `artwork` | `string` | the label's picture |
 | `albumId` | `string` | identity only: a change swaps the tape |
 | `etching` | `string?` | moulded into the tape shell, under the reels; default `"GRACE"` |
+| `brand` | `string?` | the plate on the speaker cloth, default `"retrodeck"` |
 | `isPaused` | `boolean` | |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
+### `<Radio>`
+
+A wooden table radio: printed dial glass, speaker cloth and a knurled tuning knob.
+Every track is a station — the `trackId` hashes to a fixed spot on the dial, so
+going back lands the needle where it was. A new id sweeps the needle across and
+bursts static while it travels: white noise through a narrow bandpass, synthesised.
+The knob is the wheel's own drag mechanic; it also takes focus, where the arrow
+keys tune and space plays.
+
+| prop | type | |
+| --- | --- | --- |
+| `trackId` | `string` | identity only: it decides the station and drives the sweep |
+| `trackName`, `artist` | `string` | printed on the dial glass |
+| `isPaused` | `boolean` | lights the lamp |
+| `brand` | `string?` | silk-screened at the bottom of the glass, default `"retrodeck"` |
+| `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
+
+## Painting one chassis
+
+Every component takes `className` and `style`, both landing on the chassis itself,
+so a single player can break from the page palette without a second stylesheet.
+
+```jsx
+<Turntable style={{ "--rd-body": "#9e2f2a" }} {...props} />
+```
+
 ## Colour
 
-Two custom properties paint all four, each in its own material: saturated plastic
-(cassette, discman), dark lacquer (turntable), brushed aluminium (wheel).
+Two custom properties paint all five, each in its own material: saturated plastic
+(cassette, discman), dark lacquer (turntable), brushed aluminium (wheel), tinted
+walnut (radio).
 
 ```css
 .app {
@@ -118,9 +150,9 @@ defaults are amber on blue.
 ## Sound
 
 The cassette and the turntable play short mp3s that ship with the package; the
-wheel's click and the CD motor are synthesised with WebAudio, because a 30 ms clip
-isn't worth the download. Nothing plays until the user touches something, which is
-also what browsers require.
+wheel's click, the CD motor and the radio's static are synthesised with WebAudio,
+because a 30 ms clip isn't worth the download. Nothing plays until the user touches
+something, which is also what browsers require.
 
 ```js
 import { setSfxVolume } from "retrodeck";
@@ -130,6 +162,15 @@ setSfxVolume(0.6); // 0 silences everything, including the synthesised clicks
 
 Tie it to your player's volume: music turned down while the deck still clunks at
 full blast is the thing people notice first.
+
+## Keyboard and screen readers
+
+Every button is a real `<button>` with a label that follows its state (`Play` /
+`Pause`), the track and artist sit in a polite live region — never the whole
+screen, which also holds a timer that moves four times a second — and the two
+rotary surfaces, the click wheel and the tuning knob, take focus and answer the
+arrow keys. The focus ring is drawn in `--rd-accent`, since the browser's own
+outline disappears on dark plastic.
 
 ## Two details
 
@@ -141,6 +182,6 @@ full blast is the thing people notice first.
 ## Where it comes from
 
 Extracted from [Radiostatio](https://radiostatio.vercel.app), a Spotify player
-with retro cases, where these four have been in use with a real audio pipeline.
+with retro cases, where these have been in use with a real audio pipeline.
 
 MIT.

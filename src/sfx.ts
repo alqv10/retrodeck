@@ -100,3 +100,35 @@ export function playDiscSpin() {
   osc.start(now);
   osc.stop(now + 0.46);
 }
+
+/**
+ * La estática de pasar entre emisoras. Ruido blanco por un pasabanda angosto:
+ * crudo suena a cascada, no a radio. Sintetizada como el resto de lo corto.
+ */
+export function playStatic(durationMs = 620) {
+  if (master === 0) return;
+  audioCtx ??= new AudioContext();
+  const ctx = audioCtx;
+  const dur = durationMs / 1000;
+  const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const band = ctx.createBiquadFilter();
+  band.type = "bandpass";
+  band.frequency.value = 1500;
+  band.Q.value = 0.7;
+  const gain = ctx.createGain();
+
+  const now = ctx.currentTime;
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.1 * master, now + 0.05);
+  gain.gain.setValueAtTime(0.1 * master, now + dur * 0.65);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+  src.connect(band).connect(gain).connect(ctx.destination);
+  src.start(now);
+  src.stop(now + dur);
+}

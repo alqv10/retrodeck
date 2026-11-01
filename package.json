@@ -1,7 +1,7 @@
 {
   "name": "retrodeck",
   "version": "0.1.0",
-  "description": "Four retro music-player chassis as React components: click wheel, turntable, discman and cassette deck. Pure CSS, mechanical sound, zero dependencies.",
+  "description": "Five retro music-player chassis as React components: click wheel, turntable, discman, cassette deck and dial radio. Pure CSS, mechanical sound, zero dependencies.",
   "license": "MIT",
   "type": "module",
   "keywords": [
@@ -12,6 +12,7 @@
     "music-player",
     "cassette",
     "turntable",
+    "radio",
     "css"
   ],
   "homepage": "https://retrodeck-jet.vercel.app",
