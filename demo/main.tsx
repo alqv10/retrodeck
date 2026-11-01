@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Cassette, CdPlayer, setSfxVolume, Turntable, Wheel } from "../src/index.ts";
 import "../src/retrodeck.css";
 import "./demo.css";
-import { useFakePlayer } from "./fakePlayer.ts";
+import { cover, useFakePlayer } from "./fakePlayer.ts";
 
 const PLASTICS = ["#1f5aa8", "#9e2f2a", "#2c7a56", "#3a3d44", "#b08a4a", "#5b3f9e"];
 const ACCENTS = ["#e3b765", "#e0614f", "#5ec98b", "#6ab6f0", "#f08bc0", "#dcd8cf"];
@@ -13,6 +13,146 @@ function Snippet({ code }: { code: string }) {
     <pre className="snippet">
       <code>{code}</code>
     </pre>
+  );
+}
+
+const DECKS = ["cassette", "cd", "turntable", "wheel"] as const;
+type DeckName = (typeof DECKS)[number];
+
+/**
+ * El banco de pruebas: una cinta inventada por el visitante y un solo aparato
+ * para verla entrar. El álbum se carga con el botón y no mientras se escribe:
+ * si no, cada tecla sería un cambio de álbum, con su expulsión y su ruido.
+ */
+function Bench() {
+  const player = useFakePlayer(0);
+  const [deck, setDeck] = useState<DeckName>("cassette");
+  const [draft, setDraft] = useState({ album: "Night Shift", artist: "The Spare Parts", track: "Sound check", hue: 28 });
+  const [tape, setTape] = useState(draft);
+  const [mark, setMark] = useState("GRACE");
+  const [body, setBody] = useState("#9e2f2a");
+
+  const art = cover(tape.hue);
+  const common = {
+    isPaused: player.isPaused,
+    onNext: player.onNext,
+    onPrevious: player.onPrevious,
+    onTogglePlay: player.onTogglePlay,
+    style: { "--rd-body": body } as CSSProperties,
+  };
+
+  const decks: Record<DeckName, ReactNode> = {
+    cassette: <Cassette {...common} albumId={tape.album} albumName={tape.album} artwork={art} etching={mark} brand={mark || "retrodeck"} />,
+    cd: (
+      <CdPlayer
+        {...common}
+        albumId={tape.album}
+        trackId={`${tape.album}-${player.trackId}`}
+        trackName={tape.track}
+        artist={tape.artist}
+        artwork={art}
+        badge={mark ? `${mark} · DIGITAL AUDIO` : undefined}
+      />
+    ),
+    turntable: (
+      <Turntable
+        {...common}
+        artwork={art}
+        spinTrigger={player.spinTrigger}
+        remainingMs={player.remainingMs}
+        etching={mark}
+        brand={mark || "retrodeck"}
+      />
+    ),
+    wheel: (
+      <Wheel
+        {...common}
+        trackName={tape.track}
+        artist={tape.artist}
+        progressMs={player.progressMs}
+        durationMs={player.durationMs}
+        brand={mark || "retrodeck"}
+      />
+    ),
+  };
+
+  const code = `<${deck === "cd" ? "CdPlayer" : deck === "wheel" ? "Wheel" : deck === "cassette" ? "Cassette" : "Turntable"}
+  ${deck === "cassette" ? `albumName="${tape.album}"\n  ` : ""}${deck === "wheel" || deck === "cd" ? `trackName="${tape.track}"\n  artist="${tape.artist}"\n  ` : ""}${deck === "cassette" || deck === "turntable" ? `etching="${mark}"` : deck === "cd" ? `badge="${mark} · DIGITAL AUDIO"` : `brand="${mark}"`}
+  style={{ "--rd-body": "${body}" }}
+  …
+/>`;
+
+  return (
+    <section className="bench">
+      <h2>Make your own</h2>
+      <p>
+        Write a record, pick a chassis, paint that one only. <code>style</code> and <code>className</code> land on the
+        chassis, so one player can break from the page palette without a second stylesheet.
+      </p>
+
+      <div className="bench__grid">
+        <form
+          className="bench__form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setTape(draft);
+          }}
+        >
+          <div className="bench__tabs" role="group" aria-label="Chassis">
+            {DECKS.map((name) => (
+              <button
+                key={name}
+                type="button"
+                className={`bench__tab ${deck === name ? "bench__tab--on" : ""}`}
+                onClick={() => setDeck(name)}
+                aria-pressed={deck === name}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+
+          <label className="bench__field">
+            Album
+            <input value={draft.album} onChange={(e) => setDraft({ ...draft, album: e.target.value })} maxLength={28} />
+          </label>
+          <label className="bench__field">
+            Artist
+            <input value={draft.artist} onChange={(e) => setDraft({ ...draft, artist: e.target.value })} maxLength={28} />
+          </label>
+          <label className="bench__field">
+            Track
+            <input value={draft.track} onChange={(e) => setDraft({ ...draft, track: e.target.value })} maxLength={28} />
+          </label>
+          <label className="bench__field">
+            Etched mark
+            <input value={mark} onChange={(e) => setMark(e.target.value.slice(0, 14))} maxLength={14} />
+          </label>
+          <label className="bench__field bench__field--row">
+            Cover
+            <input
+              type="range"
+              min="0"
+              max="359"
+              value={draft.hue}
+              onChange={(e) => setDraft({ ...draft, hue: Number(e.target.value) })}
+              aria-label="Cover hue"
+            />
+          </label>
+          <label className="bench__field bench__field--row">
+            Plastic
+            <input type="color" value={body} onChange={(e) => setBody(e.target.value)} aria-label="This chassis only" />
+          </label>
+
+          <button className="bench__load" type="submit">
+            Load it
+          </button>
+          <Snippet code={code} />
+        </form>
+
+        <div className={deck === "wheel" ? "stage stage--wheel" : "stage"}>{decks[deck]}</div>
+      </div>
+    </section>
   );
 }
 
@@ -183,6 +323,8 @@ function Demo() {
           />
         </div>
       </section>
+
+      <Bench />
 
       <section className="paint">
         <h2>Two variables paint all four</h2>

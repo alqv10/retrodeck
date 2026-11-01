@@ -7,3 +7,14 @@
   --rd-accent: #e3b765;
   --rd-body: #1f5aa8;
 }
+
+/*
+ * El foco del teclado. Los aparatos son de plástico oscuro y metal: un outline
+ * del color del navegador se pierde encima. Va con :focus-visible, así el
+ * mouse no deja el anillo puesto después de cada click.
+ */
+:is(.rd-pocket, .rd-turntable, .rd-cd-player, .rd-cassette) :focus-visible {
+  outline: 2px solid var(--rd-accent, #e3b765);
+  outline-offset: 2px;
+  border-radius: 3px;
+}

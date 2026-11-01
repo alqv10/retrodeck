@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { playDiscSpin, playSfx } from "./sfx.ts";
 
 interface CdPlayerProps {
@@ -11,6 +11,11 @@ interface CdPlayerProps {
   onNext: () => void;
   onPrevious: () => void;
   onTogglePlay: () => void;
+  /** Lo serigrafiado abajo del chasis. */
+  badge?: string;
+  /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
+  className?: string;
+  style?: CSSProperties;
 }
 
 type Phase = "idle" | "opening" | "ejecting" | "inserting" | "closing";
@@ -32,6 +37,9 @@ export function CdPlayer({
   onNext,
   onPrevious,
   onTogglePlay,
+  badge = "COMPACT DISC · DIGITAL AUDIO",
+  className = "",
+  style,
 }: CdPlayerProps) {
   const [disc, setDisc] = useState(artwork);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -82,9 +90,9 @@ export function CdPlayer({
   const spinning = !isPaused && phase === "idle";
 
   return (
-    <div className="rd-cd-player">
+    <div className={`rd-cd-player ${className}`} style={style} role="group" aria-label="Discman">
       <div className="rd-cd-player__body">
-        <div className="rd-cd-player__lcd">
+        <div className="rd-cd-player__lcd" aria-live="polite">
           <span className="rd-cd-player__lcd-track">{trackName || "NO DISC"}</span>
           <span className="rd-cd-player__lcd-artist">{artist || "—"}</span>
         </div>
@@ -110,7 +118,7 @@ export function CdPlayer({
           <button
             className="rd-cd-player__button rd-cd-player__button--play"
             onClick={onTogglePlay}
-            aria-label="Play / pause"
+            aria-label={isPaused ? "Play" : "Pause"}
           >
             {isPaused ? (
               <svg viewBox="0 0 24 24" width="16" height="16">
@@ -130,9 +138,11 @@ export function CdPlayer({
           </button>
         </div>
 
-        <span className="rd-cd-player__badge" aria-hidden="true">
-          COMPACT DISC · DIGITAL AUDIO
-        </span>
+        {badge && (
+          <span className="rd-cd-player__badge" aria-hidden="true">
+            {badge}
+          </span>
+        )}
       </div>
     </div>
   );

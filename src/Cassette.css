@@ -278,6 +278,28 @@
 }
 
 /* Mechanical transport keys along the bottom of the body */
+/* Chapita de marca sobre el borde derecho del parlante, como la serigrafía de
+   los decks de verdad. El band entre el parlante y las teclas son 8px: no entra
+   nada ahí, así que va encima de la tela. */
+.rd-cassette__brand {
+  position: absolute;
+  right: 7%;
+  top: calc(12px + var(--rd-bay-h) + 8px);
+  height: 26px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--rd-body, #1f5aa8) 55%, #000000);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.18);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--rd-accent, #e3b765) 72%, #ffffff);
+}
+
 .rd-cassette__keys {
   position: absolute;
   left: 5%;

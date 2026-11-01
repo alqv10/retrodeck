@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { playSfx } from "./sfx.ts";
 
 interface CassetteProps {
@@ -11,6 +11,11 @@ interface CassetteProps {
   onTogglePlay: () => void;
   /** Texto moldeado en el plástico de la cinta, abajo de los carretes. */
   etching?: string;
+  /** Marca serigrafiada en el frente del deck, al lado del parlante. */
+  brand?: string;
+  /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
+  className?: string;
+  style?: CSSProperties;
 }
 
 type Phase = "idle" | "opening" | "ejecting" | "inserting" | "closing";
@@ -31,6 +36,9 @@ export function Cassette({
   onPrevious,
   onTogglePlay,
   etching = "GRACE",
+  brand = "retrodeck",
+  className = "",
+  style,
 }: CassetteProps) {
   const [tape, setTape] = useState({ name: albumName, art: artwork });
   const [phase, setPhase] = useState<Phase>("idle");
@@ -71,7 +79,7 @@ export function Cassette({
   const reelsSpinning = !isPaused && phase === "idle";
 
   return (
-    <div className="rd-cassette">
+    <div className={`rd-cassette ${className}`} style={style} role="group" aria-label={`${brand} cassette deck`}>
       <div className="rd-cassette__deck">
         <div className={`rd-cassette__bay ${lidOpen ? "rd-cassette__bay--open" : ""}`}>
           <div className={`rd-cassette__tape rd-cassette__tape--${phase}`}>
@@ -81,7 +89,9 @@ export function Cassette({
               ) : (
                 <span className="rd-cassette__tape-art-empty" aria-hidden="true" />
               )}
-              <p className="rd-cassette__tape-title">{tape.name || "Mixtape"}</p>
+              <p className="rd-cassette__tape-title" aria-live="polite">
+                {tape.name || "Mixtape"}
+              </p>
             </div>
 
             <div className="rd-cassette__tape-window">
@@ -103,6 +113,11 @@ export function Cassette({
         </div>
 
         <div className="rd-cassette__speaker" aria-hidden="true" />
+        {brand && (
+          <span className="rd-cassette__brand" aria-hidden="true">
+            {brand}
+          </span>
+        )}
 
         <div className="rd-cassette__keys">
           <button className="rd-cassette__key" onClick={onPrevious} aria-label="Previous track">
@@ -110,7 +125,7 @@ export function Cassette({
               <path d="M6 5h2v14H6zm3 7 11-7v14z" fill="currentColor" />
             </svg>
           </button>
-          <button className="rd-cassette__key rd-cassette__key--play" onClick={onTogglePlay} aria-label="Play / pause">
+          <button className="rd-cassette__key rd-cassette__key--play" onClick={onTogglePlay} aria-label={isPaused ? "Play" : "Pause"}>
             {isPaused ? (
               <svg viewBox="0 0 24 24" width="17" height="17">
                 <path d="M8 5l12 7-12 7z" fill="currentColor" />

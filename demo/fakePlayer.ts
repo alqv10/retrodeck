@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /** Portada generada: un SVG de dos tonos, para no cargar imágenes en la demo. */
-const cover = (hue: number) =>
+export const cover = (hue: number) =>
   `data:image/svg+xml,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">` +
       `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +

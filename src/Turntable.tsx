@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { formatRemaining } from "./format.ts";
 import { playSfx } from "./sfx.ts";
 
@@ -14,6 +14,9 @@ interface TurntableProps {
   brand?: string;
   /** Mensaje grabado en el lacre del vinilo, entre la etiqueta y el canto. Se lee con el disco quieto. */
   etching?: string;
+  /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
+  className?: string;
+  style?: CSSProperties;
 }
 
 export function Turntable({
@@ -26,6 +29,8 @@ export function Turntable({
   remainingMs,
   brand = "retrodeck",
   etching = "GRACE",
+  className = "",
+  style,
 }: TurntableProps) {
   const [selecting, setSelecting] = useState(false);
 
@@ -45,7 +50,7 @@ export function Turntable({
   }, [isPaused]);
 
   return (
-    <div className="rd-turntable">
+    <div className={`rd-turntable ${className}`} style={style} role="group" aria-label={`${brand} turntable`}>
       <span className="rd-turntable__brand" aria-hidden="true">
         {brand}
       </span>
@@ -79,7 +84,7 @@ export function Turntable({
             <path d="M6 5h2v14H6zm3 7 11-7v14z" fill="currentColor" />
           </svg>
         </button>
-        <button className="rd-turntable__play" onClick={onTogglePlay} aria-label="Play / pause">
+        <button className="rd-turntable__play" onClick={onTogglePlay} aria-label={isPaused ? "Play" : "Pause"}>
           {isPaused ? (
             <svg viewBox="0 0 24 24" width="14" height="14">
               <path d="M8 5l12 7-12 7z" fill="currentColor" />

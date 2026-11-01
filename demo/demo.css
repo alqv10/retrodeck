@@ -164,6 +164,111 @@ h1 {
   border-top: 1px solid var(--edge);
 }
 
+/* Banco de pruebas: el formulario a la izquierda y el aparato elegido a la
+   derecha, con la misma grilla que los bloques de arriba. */
+.bench {
+  padding: 48px 0;
+  border-top: 1px solid var(--edge);
+}
+
+.bench__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 56px;
+  align-items: start;
+}
+
+.bench__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.bench__tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.bench__tab {
+  flex: 1;
+  padding: 7px 4px;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.bench__tab--on {
+  border-color: var(--rd-accent);
+  color: var(--bone);
+}
+
+.bench__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bench__field--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.bench__field input[type="text"],
+.bench__field input:not([type]) {
+  padding: 8px 10px;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: var(--ground);
+  color: var(--bone);
+  font: inherit;
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.bench__field input[type="range"] {
+  flex: 1;
+  accent-color: var(--rd-accent);
+}
+
+.bench__field input[type="color"] {
+  width: 44px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.bench__load {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 9px 18px;
+  border: 1px solid var(--rd-accent);
+  border-radius: 4px;
+  background: none;
+  color: var(--bone);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.bench__load:hover {
+  background: color-mix(in srgb, var(--rd-accent) 18%, transparent);
+}
+
 .foot {
   display: flex;
   flex-wrap: wrap;
@@ -246,7 +351,8 @@ h1 {
 
 @media (max-width: 860px) {
   .hero,
-  .bay {
+  .bay,
+  .bench__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
   }

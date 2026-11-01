@@ -1,3 +1,4 @@
+import type { CSSProperties, KeyboardEvent } from "react";
 import { formatRemaining, formatTime } from "./format.ts";
 import { playTick } from "./sfx.ts";
 import { useRotaryDrag } from "./useRotaryDrag.ts";
@@ -13,6 +14,9 @@ interface WheelProps {
   durationMs: number;
   /** Texto de la pantallita, arriba del track. */
   brand?: string;
+  /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
+  className?: string;
+  style?: CSSProperties;
 }
 
 export function Wheel({
@@ -25,6 +29,8 @@ export function Wheel({
   progressMs,
   durationMs,
   brand = "retrodeck",
+  className = "",
+  style,
 }: WheelProps) {
   const played = durationMs ? Math.min(100, (progressMs / durationMs) * 100) : 0;
   const { ref, dragging, pulse, handlers } = useRotaryDrag({
@@ -34,12 +40,31 @@ export function Wheel({
     onDetent: playTick,
   });
 
+  // La rueda con el teclado. Solo cuando el foco está en la rueda misma: los
+  // botones de adentro ya responden a Enter por su cuenta y si no, cada tecla
+  // dispararía dos veces.
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") onNext();
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") onPrevious();
+    else if (e.key === " " || e.key === "Enter") onTogglePlay();
+    else return;
+    e.preventDefault();
+    playTick();
+  }
+
   return (
-    <div className="rd-pocket">
+    <div className={`rd-pocket ${className}`} style={style} role="group" aria-label={`${brand} player`}>
       <div className="rd-pocket__screen">
         <p className="rd-pocket__brand">{brand}</p>
-        <p className="rd-pocket__track">{trackName}</p>
-        <p className="rd-pocket__artist">{artist}</p>
+        {/* El live va en el track y el artista, nunca en la pantalla entera:
+            adentro está el tiempo, que cambia cuatro veces por segundo. */}
+        <p className="rd-pocket__track" aria-live="polite">
+          {trackName}
+        </p>
+        <p className="rd-pocket__artist" aria-live="polite">
+          {artist}
+        </p>
         <div className="rd-pocket__progress">
           <span className="rd-pocket__elapsed">{formatTime(progressMs)}</span>
           <span className="rd-pocket__bar">
@@ -49,7 +74,15 @@ export function Wheel({
         </div>
       </div>
 
-      <div ref={ref} className={`rd-wheel ${dragging ? "rd-wheel--dragging" : ""}`} {...handlers}>
+      <div
+        ref={ref}
+        className={`rd-wheel ${dragging ? "rd-wheel--dragging" : ""}`}
+        tabIndex={0}
+        role="group"
+        aria-label="Click wheel: arrow keys change track, space plays"
+        onKeyDown={handleKeyDown}
+        {...handlers}
+      >
         {pulse > 0 && <span key={pulse} className="rd-wheel__pulse" />}
         <div className="rd-wheel__ticks" aria-hidden="true" />
         <span className="rd-wheel__label rd-wheel__label--top">MENU</span>
@@ -86,7 +119,7 @@ export function Wheel({
             onTogglePlay();
           }}
           onPointerDown={(e) => e.stopPropagation()}
-          aria-label="Play / pause"
+          aria-label={isPaused ? "Play" : "Pause"}
         >
           <svg viewBox="0 0 30 24" width="17" height="13" aria-hidden="true">
             <path d="M3 5l10 7-10 7z" fill="currentColor" />
@@ -101,7 +134,7 @@ export function Wheel({
             onTogglePlay();
           }}
           onPointerDown={(e) => e.stopPropagation()}
-          aria-label="Play / pause"
+          aria-label={isPaused ? "Play" : "Pause"}
         >
           {isPaused ? (
             <svg viewBox="0 0 24 24" width="22" height="22">
