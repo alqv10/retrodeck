@@ -107,19 +107,21 @@ opens, the old tape ejects, the new one goes in, the lid clunks shut.
 
 ### `<Radio>`
 
-A wooden table radio: printed dial glass, speaker cloth and a knurled tuning knob.
-Every track is a station — the `trackId` hashes to a fixed spot on the dial, so
-going back lands the needle where it was. A new id sweeps the needle across and
-bursts static while it travels: white noise through a narrow bandpass, synthesised.
-The knob is the wheel's own drag mechanic; it also takes focus, where the arrow
-keys tune and space plays.
+A dark receiver with a backlit dial: FM and AM scales printed on black glass, a
+red needle that glows, and a knurled metal tuning knob. Every track is a station —
+the `trackId` hashes to a fixed spot on the dial, so going back lands the needle
+where it was. A new id sweeps the needle across and bursts static while it
+travels: noise through a bandpass that sweeps with it, plus the heterodyne
+whistle of crossing a carrier. The dial lights up while it plays. The knob is the
+wheel's own drag mechanic; it also takes focus, where the arrow keys tune and
+space plays.
 
 | prop | type | |
 | --- | --- | --- |
 | `trackId` | `string` | identity only: it decides the station and drives the sweep |
 | `trackName`, `artist` | `string` | printed on the dial glass |
-| `isPaused` | `boolean` | lights the lamp |
-| `brand` | `string?` | silk-screened at the bottom of the glass, default `"retrodeck"` |
+| `isPaused` | `boolean` | lights the lamp and the dial |
+| `brand` | `string?` | silk-screened next to the keys, default `"retrodeck"` |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
 ## Painting one chassis
@@ -135,7 +137,7 @@ so a single player can break from the page palette without a second stylesheet.
 
 Two custom properties paint all five, each in its own material: saturated plastic
 (cassette, discman), dark lacquer (turntable), brushed aluminium (wheel), tinted
-walnut (radio).
+graphite (radio).
 
 ```css
 .app {
@@ -150,8 +152,10 @@ defaults are amber on blue.
 ## Sound
 
 The cassette and the turntable play short mp3s that ship with the package; the
-wheel's click, the CD motor and the radio's static are synthesised with WebAudio,
-because a 30 ms clip isn't worth the download. Nothing plays until the user touches
+wheel's click, the CD motor, the radio's knob and its tuning sweep are synthesised
+with WebAudio, because a 30 ms clip isn't worth the download. Each file gets a
+small pool of players, so the same effect can fire again before the last one has
+finished instead of cutting it. Nothing plays until the user touches
 something, which is also what browsers require.
 
 ```js

@@ -1,7 +1,27 @@
-// Efectos mecánicos de las carcasas. Un solo <audio> por archivo, reusado:
-// crear uno nuevo en cada disparo deja nodos colgando y en móvil se corta.
-const elements = new Map<string, HTMLAudioElement>();
-const stopTimers = new Map<string, number>();
+// Efectos mecánicos de las carcasas. Hasta cuatro <audio> por archivo, que se
+// reparten los disparos: con uno solo, volver a tocar el mismo efecto antes de
+// que termine cortaba el anterior y dos no podían sonar encima. Más de cuatro
+// no se oyen como voces separadas y quedan nodos colgando, que en móvil corta.
+const POOL = 4;
+const pools = new Map<string, HTMLAudioElement[]>();
+const stopTimers = new Map<HTMLAudioElement, number>();
+
+function freeElement(name: SfxName) {
+  const pool = pools.get(name) ?? [];
+  const idle = pool.find((el) => el.paused || el.ended);
+  if (idle) return idle;
+  if (pool.length >= POOL) {
+    // Todas sonando: la más vieja es la que menos se nota al cortar.
+    const oldest = pool.shift()!;
+    pool.push(oldest);
+    return oldest;
+  }
+  const el = new Audio(FILES[name]);
+  el.preload = "auto";
+  pool.push(el);
+  pools.set(name, pool);
+  return el;
+}
 
 // Los efectos siguen el volumen del reproductor: bajar la música y que el
 // casete siga sonando igual de fuerte es lo que más molesta.
@@ -29,19 +49,14 @@ interface SfxOptions {
 }
 
 export function playSfx(name: SfxName, { volume = 0.55, from = 0, durationMs }: SfxOptions = {}) {
-  let el = elements.get(name);
-  if (!el) {
-    el = new Audio(FILES[name]);
-    el.preload = "auto";
-    elements.set(name, el);
-  }
+  const el = freeElement(name);
 
-  const timer = stopTimers.get(name);
+  const timer = stopTimers.get(el);
   if (timer) clearTimeout(timer);
 
   el.volume = Math.min(1, Math.max(0, volume * master));
-  // Un disparo nuevo pisa al anterior; sin el pause() el seek sobre un audio
-  // que ya está sonando no siempre reinicia en Safari.
+  // Sin el pause() el seek sobre un audio que ya está sonando no siempre
+  // reinicia en Safari.
   el.pause();
   try {
     el.currentTime = from;
@@ -53,12 +68,11 @@ export function playSfx(name: SfxName, { volume = 0.55, from = 0, durationMs }: 
   void el.play().catch(() => {});
 
   if (durationMs !== undefined) {
-    const el2 = el;
     stopTimers.set(
-      name,
+      el,
       window.setTimeout(() => {
-        el2.pause();
-        stopTimers.delete(name);
+        el.pause();
+        stopTimers.delete(el);
       }, durationMs),
     );
   }
@@ -101,34 +115,92 @@ export function playDiscSpin() {
   osc.stop(now + 0.46);
 }
 
+/** Ruido blanco de N segundos, para los efectos que no son tonos. */
+function noiseBuffer(ctx: AudioContext, seconds: number) {
+  const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * seconds), ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+  return buffer;
+}
+
 /**
- * La estática de pasar entre emisoras. Ruido blanco por un pasabanda angosto:
- * crudo suena a cascada, no a radio. Sintetizada como el resto de lo corto.
+ * El tope de la perilla de sintonía: un golpe seco y grave, nada que ver con
+ * el clic brillante de la rueda. Un tono solo suena a beep, así que el golpe
+ * es un chasquido de ruido filtrado y abajo un triángulo corto que le da el
+ * cuerpo de madera.
+ */
+export function playKnob() {
+  if (master === 0) return;
+  audioCtx ??= new AudioContext();
+  const ctx = audioCtx;
+  const now = ctx.currentTime;
+
+  const click = ctx.createBufferSource();
+  click.buffer = noiseBuffer(ctx, 0.02);
+  const clickFilter = ctx.createBiquadFilter();
+  clickFilter.type = "bandpass";
+  clickFilter.frequency.value = 2600;
+  clickFilter.Q.value = 1.4;
+  const clickGain = ctx.createGain();
+  clickGain.gain.setValueAtTime(0.05 * master, now);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+  click.connect(clickFilter).connect(clickGain).connect(ctx.destination);
+  click.start(now);
+  click.stop(now + 0.02);
+
+  const body = ctx.createOscillator();
+  body.type = "triangle";
+  body.frequency.setValueAtTime(320, now);
+  body.frequency.exponentialRampToValueAtTime(190, now + 0.045);
+  const bodyGain = ctx.createGain();
+  bodyGain.gain.setValueAtTime(0.055 * master, now);
+  bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+  body.connect(bodyGain).connect(ctx.destination);
+  body.start(now);
+  body.stop(now + 0.06);
+}
+
+/**
+ * Pasar entre emisoras. El ruido blanco plano suena a cinta, así que no alcanza
+ * con filtrarlo: acá el pasabanda barre mientras la aguja viaja y encima va el
+ * silbido del batido, el pitido que sube y baja al cruzar una portadora. Al
+ * final los dos se apagan de golpe, que es la emisora enganchando.
  */
 export function playStatic(durationMs = 620) {
   if (master === 0) return;
   audioCtx ??= new AudioContext();
   const ctx = audioCtx;
   const dur = durationMs / 1000;
-  const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+  const now = ctx.currentTime;
+  const lock = now + dur * 0.78;
 
-  const src = ctx.createBufferSource();
-  src.buffer = buffer;
+  const hiss = ctx.createBufferSource();
+  hiss.buffer = noiseBuffer(ctx, dur);
   const band = ctx.createBiquadFilter();
   band.type = "bandpass";
-  band.frequency.value = 1500;
-  band.Q.value = 0.7;
-  const gain = ctx.createGain();
+  band.Q.value = 3.2;
+  band.frequency.setValueAtTime(900, now);
+  band.frequency.exponentialRampToValueAtTime(2600, now + dur * 0.45);
+  band.frequency.exponentialRampToValueAtTime(1100, lock);
+  const hissGain = ctx.createGain();
+  hissGain.gain.setValueAtTime(0.0001, now);
+  hissGain.gain.exponentialRampToValueAtTime(0.11 * master, now + 0.04);
+  hissGain.gain.setValueAtTime(0.11 * master, lock);
+  hissGain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+  hiss.connect(band).connect(hissGain).connect(ctx.destination);
+  hiss.start(now);
+  hiss.stop(now + dur);
 
-  const now = ctx.currentTime;
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.1 * master, now + 0.05);
-  gain.gain.setValueAtTime(0.1 * master, now + dur * 0.65);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-
-  src.connect(band).connect(gain).connect(ctx.destination);
-  src.start(now);
-  src.stop(now + dur);
+  const beat = ctx.createOscillator();
+  beat.type = "sine";
+  beat.frequency.setValueAtTime(2300, now);
+  beat.frequency.exponentialRampToValueAtTime(380, now + dur * 0.6);
+  beat.frequency.exponentialRampToValueAtTime(1800, lock);
+  const beatGain = ctx.createGain();
+  beatGain.gain.setValueAtTime(0.0001, now);
+  beatGain.gain.exponentialRampToValueAtTime(0.03 * master, now + dur * 0.3);
+  beatGain.gain.exponentialRampToValueAtTime(0.0001, lock);
+  beat.connect(beatGain).connect(ctx.destination);
+  beat.start(now);
+  beat.stop(now + dur);
 }

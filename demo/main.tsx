@@ -318,9 +318,10 @@ function Demo() {
           <h2>Dial radio</h2>
           <p>
             Every track is a station: the id hashes to a fixed spot on the dial, so the needle always comes back to the
-            same place. A new <code>trackId</code> sweeps it across and bursts the static while it travels — white noise
-            through a narrow bandpass, synthesised, nothing to download. The knob is the click wheel's own drag
-            mechanic: turn it to tune, or focus it and use the arrow keys.
+            same place. A new <code>trackId</code> sweeps it across and bursts the static while it travels — noise
+            through a bandpass that sweeps with the needle, plus the whistle of crossing a carrier. Synthesised,
+            nothing to download. The knob is the click wheel's own drag mechanic: turn it to tune, or focus it and use
+            the arrow keys.
           </p>
           <Snippet
             code={`<Radio

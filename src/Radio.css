@@ -1,6 +1,7 @@
-/* Radio de mesa de los sesenta: caja de madera, vidrio de dial con la escala
-   impresa, tela de parlante y dos perillas. La madera es el único material que
-   no deriva del plástico: --rd-body solo la tiñe. */
+/* Receptor de mesa de los setenta: chasis oscuro, vidrio negro retroiluminado
+   con las dos escalas impresas en claro, aguja roja y perilla de metal al
+   costado. El color del chasis sale de --rd-body; el vidrio es negro siempre,
+   porque es lo que lo hace leerse como retroiluminado. */
 .rd-radio {
   width: 100%;
   display: flex;
@@ -12,83 +13,174 @@
   width: 100%;
   max-width: 320px;
   padding: 12px;
-  border-radius: 10px 10px 6px 6px;
-  background:
-    repeating-linear-gradient(
-      92deg,
-      rgba(0, 0, 0, 0.055) 0 2px,
-      rgba(255, 255, 255, 0.03) 2px 3px,
-      rgba(0, 0, 0, 0) 3px 7px
-    ),
-    linear-gradient(
-      168deg,
-      color-mix(in srgb, var(--rd-body, #1f5aa8) 16%, #8a5a33) 0%,
-      color-mix(in srgb, var(--rd-body, #1f5aa8) 22%, #6b4124) 46%,
-      color-mix(in srgb, var(--rd-body, #1f5aa8) 28%, #462915) 100%
-    ),
-    #6b4124;
+  border-radius: 10px;
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 18%, #4a4e55) 0%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 24%, #31343a) 44%,
+    color-mix(in srgb, var(--rd-body, #1f5aa8) 30%, #1d1f23) 100%
+  );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
-    inset 0 -6px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.4),
     0 12px 26px rgba(0, 0, 0, 0.5);
 }
 
-/* El vidrio del dial: fondo crema iluminado por detrás, como una radio prendida */
-.rd-radio__dial {
-  position: relative;
-  height: 86px;
-  padding: 7px 10px 0;
-  border-radius: 4px;
-  overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% 120%, rgba(255, 236, 180, 0.55) 0%, rgba(255, 236, 180, 0) 62%),
-    linear-gradient(180deg, #f3ead3 0%, #ded2b4 55%, #c8bb9b 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.45),
-    inset 0 2px 6px rgba(0, 0, 0, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.2);
+.rd-radio__face {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  gap: 11px;
+  align-items: center;
 }
 
-/* Reflejo diagonal del vidrio */
-.rd-radio__dial::after {
-  content: "";
+/* ---------- El vidrio ---------- */
+
+.rd-radio__dial {
+  position: relative;
+  height: 112px;
+  padding: 9px 10px 0;
+  border-radius: 5px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0b0d10 0%, #060709 55%, #0a0c0f 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.9),
+    inset 0 2px 7px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.14);
+  /* La luz de atrás, apagada mientras no suena */
+  --rd-glow: 0;
+}
+
+.rd-radio__dial--lit {
+  --rd-glow: 1;
+  background:
+    radial-gradient(120% 140% at 50% 115%, rgba(120, 190, 235, 0.14) 0%, rgba(120, 190, 235, 0) 60%),
+    linear-gradient(180deg, #0d1015 0%, #070910 55%, #0b0e13 100%);
+}
+
+/* Reflejo del vidrio, arriba de todo */
+.rd-radio__glass {
   position: absolute;
   inset: 0;
-  background: linear-gradient(112deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.08) 30%, transparent 31%);
+  background: linear-gradient(106deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 34%, transparent 35%);
   pointer-events: none;
 }
 
+.rd-radio__readout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.rd-radio__station {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--rd-accent, #e3b765) 72%, #ffffff);
+  text-shadow: 0 0 calc(9px * var(--rd-glow)) color-mix(in srgb, var(--rd-accent, #e3b765) 65%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rd-radio__artist {
+  min-height: 10px;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6f7d86;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Las dos escalas ---------- */
+
 .rd-radio__scale {
   position: relative;
-  height: 20px;
-  border-bottom: 1px solid rgba(60, 40, 18, 0.55);
-  /* Las rayitas finas entre número y número */
-  background-image: repeating-linear-gradient(90deg, rgba(60, 40, 18, 0.5) 0 1px, transparent 1px 5.2px);
-  background-position: bottom;
-  background-size: 100% 6px;
-  background-repeat: repeat-x;
+  height: 15px;
+  margin-top: 9px;
+  /* Las rayitas finas entre número y número, a lo largo del tramo útil */
+  background-image: repeating-linear-gradient(90deg, rgba(190, 215, 230, 0.45) 0 1px, transparent 1px 6px);
+  background-position: 14% bottom;
+  background-size: 64% 5px;
+  background-repeat: no-repeat;
+}
+
+.rd-radio__scale--am {
+  margin-top: 6px;
 }
 
 .rd-radio__mark {
   position: absolute;
-  bottom: 7px;
+  top: 0;
   transform: translateX(-50%);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #4a3317;
+  color: #cfe3ee;
+  text-shadow: 0 0 calc(7px * var(--rd-glow)) rgba(150, 205, 235, 0.75);
 }
+
+.rd-radio__band,
+.rd-radio__unit {
+  position: absolute;
+  top: 1px;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8fa6b4;
+}
+
+.rd-radio__band {
+  left: 0;
+}
+
+.rd-radio__unit {
+  right: 0;
+}
+
+/* La línea que separa las dos bandas, como la del vidrio de verdad */
+.rd-radio__rule {
+  height: 1px;
+  margin-top: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(150, 205, 235, 0.35) 12%,
+    rgba(150, 205, 235, 0.35) 88%,
+    transparent 100%
+  );
+}
+
+/* Lo que dicen el chico y el perro, impreso chiquito como la letra del
+   fabricante abajo del vidrio. */
+.rd-radio__legend {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  text-align: center;
+  font-size: 5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(143, 166, 180, 0.5);
+}
+
+/* ---------- La aguja ---------- */
 
 .rd-radio__needle {
   position: absolute;
-  top: 7px;
-  height: 34px;
+  top: 42px;
+  bottom: 18px;
   width: 2px;
   margin-left: -1px;
   border-radius: 1px;
-  background: linear-gradient(180deg, #d4342b 0%, #92201a 100%);
-  box-shadow: 0 0 6px rgba(212, 52, 43, 0.75);
+  background: linear-gradient(180deg, #ff6a57 0%, #e02a1c 45%, #9d1710 100%);
+  box-shadow:
+    0 0 7px rgba(240, 60, 44, 0.9),
+    0 0 16px rgba(240, 60, 44, 0.45);
   transition: left 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
 }
 
@@ -107,90 +199,20 @@
   }
 }
 
-.rd-radio__station {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  text-align: center;
-}
+/* ---------- La perilla ---------- */
 
-.rd-radio__station-name {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #33240f;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rd-radio__station-artist {
-  min-height: 11px;
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b5733;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rd-radio__brand {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 3px;
-  text-align: center;
-  font-size: 7px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #7a6440;
-}
-
-.rd-radio__front {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 62px;
-  gap: 10px;
-  align-items: stretch;
-  margin-top: 11px;
-}
-
-/* Tela del parlante: trama cruzada sobre el hueco oscuro */
-.rd-radio__grille {
-  height: 92px;
-  border-radius: 4px;
-  background-color: color-mix(in srgb, var(--rd-body, #1f5aa8) 12%, #c6b393);
-  background-image:
-    repeating-linear-gradient(90deg, rgba(40, 26, 10, 0.5) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(0deg, rgba(40, 26, 10, 0.42) 0 1px, transparent 1px 3px);
-  box-shadow:
-    inset 0 0 0 2px rgba(0, 0, 0, 0.38),
-    inset 0 3px 10px rgba(0, 0, 0, 0.5);
-}
-
-.rd-radio__right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Perilla de sintonía: la misma mecánica que la rueda, en metal estriado */
 .rd-radio__knob {
+  position: relative;
   width: 58px;
   height: 58px;
   border-radius: 50%;
   touch-action: none;
   cursor: grab;
-  background: radial-gradient(circle at 34% 28%, #6d7278 0%, #43474d 52%, #24272b 100%);
+  background: radial-gradient(circle at 34% 26%, #7b8087 0%, #4b4f56 52%, #23262a 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.26),
     inset 0 -3px 7px rgba(0, 0, 0, 0.6),
-    0 3px 7px rgba(0, 0, 0, 0.5);
+    0 3px 8px rgba(0, 0, 0, 0.55);
 }
 
 .rd-radio__knob--dragging {
@@ -206,60 +228,107 @@
   /* El estriado del canto, que es lo que deja ver que la perilla gira */
   background: repeating-conic-gradient(
     from 0deg,
-    rgba(255, 255, 255, 0.12) 0deg 3deg,
-    rgba(0, 0, 0, 0.22) 3deg 6deg
+    rgba(255, 255, 255, 0.14) 0deg 3deg,
+    rgba(0, 0, 0, 0.26) 3deg 6deg
   );
-  -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%);
-  mask: radial-gradient(circle, transparent 58%, #000 60%);
+  -webkit-mask: radial-gradient(circle, transparent 48%, #000 50%);
+  mask: radial-gradient(circle, transparent 48%, #000 50%);
   transition: transform 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
 }
 
 .rd-radio__knob-notch {
   position: absolute;
-  top: 3px;
+  top: 2px;
   left: 50%;
-  width: 3px;
-  height: 11px;
-  margin-left: -1.5px;
+  width: 4px;
+  height: 15px;
+  margin-left: -2px;
   border-radius: 2px;
-  background: color-mix(in srgb, var(--rd-accent, #e3b765) 85%, #ffffff);
+  background: color-mix(in srgb, var(--rd-accent, #e3b765) 88%, #ffffff);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--rd-accent, #e3b765) 55%, transparent);
 }
 
-/* Botón de encendido, con su lamparita */
-.rd-radio__power {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: none;
+/* Tapa del centro, para que la perilla tenga fondo y no un disco plano */
+.rd-radio__knob::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  cursor: pointer;
-  background: radial-gradient(circle at 34% 28%, #585c63 0%, #35383d 60%, #1c1e21 100%);
+  background: radial-gradient(circle at 36% 28%, #6a6f76 0%, #3c4046 60%, #202327 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 2px 5px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
-.rd-radio__power:active {
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-    inset 0 2px 5px rgba(0, 0, 0, 0.6);
+/* ---------- El zócalo: lámpara, marca y teclas ---------- */
+
+.rd-radio__base {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 11px;
 }
 
 .rd-radio__lamp {
-  width: 9px;
-  height: 9px;
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #4a3a22;
+  background: #4b2420;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
   transition:
     background 180ms ease,
     box-shadow 180ms ease;
 }
 
-.rd-radio__power--on .rd-radio__lamp {
-  background: color-mix(in srgb, var(--rd-accent, #e3b765) 92%, #ffffff);
-  box-shadow: 0 0 9px color-mix(in srgb, var(--rd-accent, #e3b765) 70%, transparent);
+.rd-radio__lamp--on {
+  background: #ff5340;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 0 8px rgba(255, 83, 64, 0.8);
+}
+
+.rd-radio__brand {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 8px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.rd-radio__keys {
+  display: flex;
+  gap: 5px;
+}
+
+.rd-radio__key {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(180deg, #595e66 0%, #3a3e44 55%, #26292e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 2px 3px rgba(0, 0, 0, 0.45);
+}
+
+.rd-radio__key:active {
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
