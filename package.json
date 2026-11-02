@@ -1,6 +1,6 @@
 {
   "name": "retrodeck",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Five retro music-player chassis as React components: click wheel, turntable, discman, cassette deck and dial radio. Pure CSS, mechanical sound, zero dependencies.",
   "license": "MIT",
   "type": "module",

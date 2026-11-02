@@ -108,6 +108,8 @@ export function Cassette({
                 {etching}
               </span>
             )}
+            <Stickers list={stickers} />
+
             <span className="rd-cassette__tape-head" aria-hidden="true" />
           </div>
 
@@ -122,8 +124,6 @@ export function Cassette({
             {brand}
           </span>
         )}
-
-        <Stickers list={stickers} />
 
         <div className="rd-cassette__keys">
           <button className="rd-cassette__key" onClick={onPrevious} aria-label="Previous track">

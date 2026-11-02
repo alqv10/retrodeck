@@ -353,8 +353,9 @@
   }
 }
 
-/* Sobre la laca, abajo a la izquierda: los botones están abajo a la derecha. */
+/* Arriba a la derecha: abajo a la izquierda está la lámpara de encendido, que
+   les tapaba la cara, y el brazo termina en los 226px. */
 .rd-turntable .rd-stickers {
-  left: 16px;
-  bottom: 18px;
+  right: 14px;
+  top: 14px;
 }
