@@ -101,7 +101,7 @@ opens, the old tape ejects, the new one goes in, the lid clunks shut.
 | `artwork` | `string` | the label's picture |
 | `albumId` | `string` | identity only: a change swaps the tape |
 | `etching` | `string?` | moulded into the tape shell, under the reels; default `"GRACE"` |
-| `brand` | `string?` | the plate on the speaker cloth, default `"retrodeck"` |
+| `brand` | `string?` | the plate on the acrylic lid of the tape deck, default `"retrodeck"` |
 | `isPaused` | `boolean` | |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
@@ -129,7 +129,7 @@ space plays.
 Every chassis takes `stickers`: image URLs stuck onto it, each at its own angle,
 with a die-cut white edge and the shadow of something lying on top. Each one
 lands where it would on that machine — on the dial glass, on the aluminium beside
-the wheel, on the speaker cloth, on the plinth, on the plastic of the discman.
+the wheel, on the acrylic lid of the tape deck, on the plinth, on the plastic of the discman.
 Nothing ships in the package; the slot is there for whatever you'd stick on your
 own.
 
