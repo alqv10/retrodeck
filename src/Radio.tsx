@@ -17,8 +17,9 @@ interface RadioProps {
   /**
    * Calcomanías pegadas en el vidrio, abajo a la izquierda: las URLs de las
    * imágenes. Es el lugar para el chiste privado de cada uno — el paquete no
-   * trae ninguna. Se pegan en el orden que vengan y cada una sale torcida
-   * distinto, como se pegan de verdad.
+   * trae ninguna. Se pegan en el orden que vengan, apenas montadas una sobre
+   * otra y cada una torcida hacia la de al lado: así el grupo se lee junto y
+   * no como dos calcos sueltas que se dan la espalda.
    */
   stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
@@ -149,7 +150,7 @@ export function Radio({
             {stickers && stickers.length > 0 && (
               <div className="rd-radio__stickers" aria-hidden="true">
                 {stickers.map((src, i) => (
-                  <img key={src} className="rd-radio__sticker" src={src} alt="" draggable={false} style={{ "--rd-tilt": `${i % 2 ? 5 : -7}deg` } as CSSProperties} />
+                  <img key={src} className="rd-radio__sticker" src={src} alt="" draggable={false} style={{ "--rd-tilt": `${i % 2 ? -5 : 7}deg` } as CSSProperties} />
                 ))}
               </div>
             )}

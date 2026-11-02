@@ -163,12 +163,14 @@
   bottom: 3px;
   display: flex;
   align-items: flex-end;
-  gap: 2px;
+  gap: 0;
 }
 
 .rd-radio__sticker {
   width: auto;
   height: 26px;
+  /* Apenas montadas, como quedan pegadas a mano una al lado de la otra */
+  margin-right: -3px;
   transform: rotate(var(--rd-tilt, -6deg));
   transform-origin: bottom center;
   /* El canto blanco troquelado y la sombra de lo que está pegado encima */
