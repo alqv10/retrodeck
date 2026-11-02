@@ -1,6 +1,7 @@
 import type { CSSProperties, KeyboardEvent } from "react";
 import { formatRemaining, formatTime } from "./format.ts";
 import { playTick } from "./sfx.ts";
+import { Stickers } from "./Stickers.tsx";
 import { useRotaryDrag } from "./useRotaryDrag.ts";
 
 interface WheelProps {
@@ -14,6 +15,8 @@ interface WheelProps {
   durationMs: number;
   /** Texto de la pantallita, arriba del track. */
   brand?: string;
+  /** Calcomanías pegadas en la carcasa: las URLs de las imágenes. */
+  stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
   className?: string;
   style?: CSSProperties;
@@ -29,6 +32,7 @@ export function Wheel({
   progressMs,
   durationMs,
   brand = "retrodeck",
+  stickers,
   className = "",
   style,
 }: WheelProps) {
@@ -148,6 +152,8 @@ export function Wheel({
           )}
         </button>
       </div>
+
+      <Stickers list={stickers} />
     </div>
   );
 }

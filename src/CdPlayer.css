@@ -306,3 +306,10 @@
     transition: none;
   }
 }
+
+/* En el plástico del costado izquierdo, a media altura: arriba está el visor y
+   abajo los botones, y el pozo del disco empieza recién en el 19%. */
+.rd-cd-player .rd-stickers {
+  left: 4%;
+  top: 48%;
+}

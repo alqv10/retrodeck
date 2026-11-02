@@ -1,6 +1,7 @@
 /* iPod classic 6th gen: anodised aluminium chassis holding a glossy black screen
    and a light grey click wheel. */
 .rd-pocket {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -249,4 +250,11 @@ button.rd-wheel__label:active {
   .rd-wheel__pulse {
     display: none;
   }
+}
+
+/* Pegadas en el aluminio, en la esquina de abajo a la izquierda: es el hueco
+   que deja la rueda, que es redonda. */
+.rd-pocket .rd-stickers {
+  left: 10px;
+  bottom: 12px;
 }

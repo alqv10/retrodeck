@@ -197,11 +197,11 @@ function Demo() {
   const capture = new URLSearchParams(location.search).get("capture");
   if (capture !== null) {
     const decks: Record<string, ReactNode> = {
-      wheel: <Wheel {...wheel} brand="retrodeck" />,
-      turntable: <Turntable {...turntable} />,
-      cd: <CdPlayer {...discman} />,
-      cassette: <Cassette {...cassette} />,
-      radio: <Radio {...radio} />,
+      wheel: <Wheel {...wheel} brand="retrodeck" stickers={STICKERS} />,
+      turntable: <Turntable {...turntable} stickers={STICKERS} />,
+      cd: <CdPlayer {...discman} stickers={STICKERS} />,
+      cassette: <Cassette {...cassette} stickers={STICKERS} />,
+      radio: <Radio {...radio} stickers={STICKERS} />,
     };
     const shown = capture in decks ? [capture] : Object.keys(decks);
     return (

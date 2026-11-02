@@ -384,3 +384,11 @@
     transition: none;
   }
 }
+
+/* Sobre la tela del parlante, del lado contrario a la chapita de la marca. */
+.rd-cassette .rd-stickers {
+  left: 7%;
+  top: calc(12px + var(--rd-bay-h) + 8px);
+  align-items: center;
+  height: 26px;
+}

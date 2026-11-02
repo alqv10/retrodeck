@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { formatRemaining } from "./format.ts";
 import { playSfx } from "./sfx.ts";
+import { Stickers } from "./Stickers.tsx";
 
 interface TurntableProps {
   artwork: string;
@@ -14,6 +15,8 @@ interface TurntableProps {
   brand?: string;
   /** Mensaje grabado en el lacre del vinilo, entre la etiqueta y el canto. Se lee con el disco quieto. */
   etching?: string;
+  /** Calcomanías pegadas en la carcasa: las URLs de las imágenes. */
+  stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
   className?: string;
   style?: CSSProperties;
@@ -29,6 +32,7 @@ export function Turntable({
   remainingMs,
   brand = "retrodeck",
   etching = "GRACE",
+  stickers,
   className = "",
   style,
 }: TurntableProps) {
@@ -102,6 +106,8 @@ export function Turntable({
           </svg>
         </button>
       </div>
+
+      <Stickers list={stickers} />
 
       <span className={`rd-turntable__power ${isPaused ? "" : "rd-turntable__power--on"}`} aria-hidden="true" />
     </div>

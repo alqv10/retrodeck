@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { playSfx } from "./sfx.ts";
+import { Stickers } from "./Stickers.tsx";
 
 interface CassetteProps {
   isPaused: boolean;
@@ -13,6 +14,8 @@ interface CassetteProps {
   etching?: string;
   /** Marca serigrafiada en el frente del deck, al lado del parlante. */
   brand?: string;
+  /** Calcomanías pegadas en la carcasa: las URLs de las imágenes. */
+  stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
   className?: string;
   style?: CSSProperties;
@@ -37,6 +40,7 @@ export function Cassette({
   onTogglePlay,
   etching = "GRACE",
   brand = "retrodeck",
+  stickers,
   className = "",
   style,
 }: CassetteProps) {
@@ -118,6 +122,8 @@ export function Cassette({
             {brand}
           </span>
         )}
+
+        <Stickers list={stickers} />
 
         <div className="rd-cassette__keys">
           <button className="rd-cassette__key" onClick={onPrevious} aria-label="Previous track">

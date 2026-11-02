@@ -154,27 +154,11 @@
   );
 }
 
-/* Calcomanías pegadas en el vidrio. Van abajo a la izquierda, donde no tapan
-   la aguja ni los números, y cada una torcida lo suyo: pegadas a ojo, no
-   alineadas. El brillo del vidrio les pasa por encima. */
-.rd-radio__stickers {
-  position: absolute;
+/* Las calcos van abajo a la izquierda del vidrio, donde no tapan la aguja ni
+   los números. El brillo del vidrio les pasa por encima. */
+.rd-radio .rd-stickers {
   left: 6px;
   bottom: 3px;
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.rd-radio__sticker {
-  width: auto;
-  height: 26px;
-  transform: rotate(var(--rd-tilt, -6deg));
-  transform-origin: bottom center;
-  /* El canto blanco troquelado y la sombra de lo que está pegado encima */
-  filter:
-    drop-shadow(0 0 1px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.75))
-    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.55));
 }
 
 /* ---------- La aguja ---------- */

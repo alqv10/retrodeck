@@ -122,15 +122,23 @@ space plays.
 | `trackName`, `artist` | `string` | printed on the dial glass |
 | `isPaused` | `boolean` | lights the lamp and the dial |
 | `brand` | `string?` | silk-screened next to the keys, default `"retrodeck"` |
-| `stickers` | `string[]?` | image URLs, stuck on the glass bottom-left, each at its own angle |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
 
-Nothing ships in `stickers` — the slot is there for whatever you'd stick on your
-own radio.
+## Stickers
+
+Every chassis takes `stickers`: image URLs stuck onto it, each at its own angle,
+with a die-cut white edge and the shadow of something lying on top. Each one
+lands where it would on that machine — on the dial glass, on the aluminium beside
+the wheel, on the speaker cloth, on the plinth, on the plastic of the discman.
+Nothing ships in the package; the slot is there for whatever you'd stick on your
+own.
 
 ```jsx
-<Radio stickers={["/stickers/one.png", "/stickers/two.png"]} {...props} />
+<Cassette stickers={["/stickers/one.png", "/stickers/two.png"]} {...props} />
 ```
+
+Transparent PNGs look best — the white edge is drawn from the image's own
+silhouette.
 
 ## Painting one chassis
 

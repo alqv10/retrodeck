@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { playDiscSpin, playSfx } from "./sfx.ts";
+import { Stickers } from "./Stickers.tsx";
 
 interface CdPlayerProps {
   artwork: string;
@@ -13,6 +14,8 @@ interface CdPlayerProps {
   onTogglePlay: () => void;
   /** Lo serigrafiado abajo del chasis. */
   badge?: string;
+  /** Calcomanías pegadas en la carcasa: las URLs de las imágenes. */
+  stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
   className?: string;
   style?: CSSProperties;
@@ -38,6 +41,7 @@ export function CdPlayer({
   onPrevious,
   onTogglePlay,
   badge = "COMPACT DISC · DIGITAL AUDIO",
+  stickers,
   className = "",
   style,
 }: CdPlayerProps) {
@@ -137,6 +141,8 @@ export function CdPlayer({
             </svg>
           </button>
         </div>
+
+        <Stickers list={stickers} />
 
         {badge && (
           <span className="rd-cd-player__badge" aria-hidden="true">

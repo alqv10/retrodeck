@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { station } from "./dial.ts";
+import { Stickers } from "./Stickers.tsx";
 import { playKnob, playStatic } from "./sfx.ts";
 import { useRotaryDrag } from "./useRotaryDrag.ts";
 
@@ -147,13 +148,7 @@ export function Radio({
               aria-hidden="true"
             />
 
-            {stickers && stickers.length > 0 && (
-              <div className="rd-radio__stickers" aria-hidden="true">
-                {stickers.map((src, i) => (
-                  <img key={src} className="rd-radio__sticker" src={src} alt="" draggable={false} style={{ "--rd-tilt": `${i % 2 ? -5 : 7}deg` } as CSSProperties} />
-                ))}
-              </div>
-            )}
+            <Stickers list={stickers} />
 
             <span className="rd-radio__glass" aria-hidden="true" />
           </div>
