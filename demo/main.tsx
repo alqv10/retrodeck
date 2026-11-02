@@ -5,6 +5,14 @@ import "../src/retrodeck.css";
 import "./demo.css";
 import { cover, useFakePlayer } from "./fakePlayer.ts";
 
+// Dos calcos de ejemplo, dibujadas acá: el paquete no trae ninguna, el hueco es
+// para la que quiera pegar cada uno.
+const sticker = (svg: string) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">${svg}</svg>`)}`;
+const STICKERS = [
+  sticker(`<circle cx="20" cy="20" r="15" fill="#f2c14e"/><circle cx="15" cy="17" r="2" fill="#2b2b2b"/><circle cx="25" cy="17" r="2" fill="#2b2b2b"/><path d="M13 24c3 4 11 4 14 0" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round"/>`),
+  sticker(`<path d="M20 4l4.6 10.2L35 15.8l-7.6 7.3 1.9 10.6L20 28.6l-9.3 5.1 1.9-10.6L5 15.8l10.4-1.6z" fill="#e0614f"/>`),
+];
+
 const PLASTICS = ["#1f5aa8", "#9e2f2a", "#2c7a56", "#3a3d44", "#b08a4a", "#5b3f9e"];
 const ACCENTS = ["#e3b765", "#e0614f", "#5ec98b", "#6ab6f0", "#f08bc0", "#dcd8cf"];
 
@@ -312,7 +320,7 @@ function Demo() {
 
       <section className="bay bay--flip">
         <div className="stage">
-          <Radio {...radio} />
+          <Radio {...radio} stickers={STICKERS} />
         </div>
         <div className="bay__words">
           <h2>Dial radio</h2>

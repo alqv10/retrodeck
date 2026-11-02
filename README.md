@@ -122,7 +122,15 @@ space plays.
 | `trackName`, `artist` | `string` | printed on the dial glass |
 | `isPaused` | `boolean` | lights the lamp and the dial |
 | `brand` | `string?` | silk-screened next to the keys, default `"retrodeck"` |
+| `stickers` | `string[]?` | image URLs, stuck on the glass bottom-left, each at its own angle |
 | `onNext`, `onPrevious`, `onTogglePlay` | `() => void` | |
+
+Nothing ships in `stickers` — the slot is there for whatever you'd stick on your
+own radio.
+
+```jsx
+<Radio stickers={["/stickers/one.png", "/stickers/two.png"]} {...props} />
+```
 
 ## Painting one chassis
 
