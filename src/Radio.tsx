@@ -17,9 +17,9 @@ interface RadioProps {
   /**
    * Calcomanías pegadas en el vidrio, abajo a la izquierda: las URLs de las
    * imágenes. Es el lugar para el chiste privado de cada uno — el paquete no
-   * trae ninguna. Se pegan en el orden que vengan, apenas montadas una sobre
-   * otra y cada una torcida hacia la de al lado: así el grupo se lee junto y
-   * no como dos calcos sueltas que se dan la espalda.
+   * trae ninguna. Se pegan en el orden que vengan, cada una torcida hacia la
+   * de al lado: así el grupo se lee junto y no como dos calcos sueltas que se
+   * dan la espalda.
    */
   stickers?: string[];
   /** Se suma a la clase del chasis, para pintar este aparato y no los otros. */
