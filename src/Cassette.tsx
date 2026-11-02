@@ -108,13 +108,12 @@ export function Cassette({
                 {etching}
               </span>
             )}
-            <Stickers list={stickers} />
-
             <span className="rd-cassette__tape-head" aria-hidden="true" />
           </div>
 
           <div className="rd-cassette__lid" aria-hidden="true">
             <span className="rd-cassette__lid-grip" />
+            <Stickers list={stickers} />
           </div>
         </div>
 

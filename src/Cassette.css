@@ -385,15 +385,15 @@
   }
 }
 
-/* Pegadas sobre el visor de la cinta, no sobre el deck: así entran y salen con
-   el casete cuando se cambia de álbum, que es lo que haría una calco pegada al
-   plástico de verdad. Van más grandes que en las otras carcasas porque acá el
-   fondo es oscuro y chico. */
-.rd-cassette__tape .rd-stickers {
+/* Pegadas en el acrílico de la tapa, abajo a la izquierda, lejos de la manija:
+   se levantan con ella al abrir y la cinta pasa por debajo. Encima del reflejo,
+   que el brillo es del vidrio y la calco está del lado de afuera. */
+.rd-cassette__lid .rd-stickers {
   left: 10px;
-  top: 49%;
+  bottom: 8px;
+  z-index: 1;
 }
 
-.rd-cassette__tape .rd-sticker {
+.rd-cassette__lid .rd-sticker {
   height: 34px;
 }
