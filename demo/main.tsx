@@ -39,9 +39,11 @@ function Bench() {
   const [tape, setTape] = useState(draft);
   const [mark, setMark] = useState("GRACE");
   const [body, setBody] = useState("#9e2f2a");
+  const [stickers, setStickers] = useState(true);
 
   const art = cover(tape.hue);
   const common = {
+    stickers: stickers ? STICKERS : undefined,
     isPaused: player.isPaused,
     onNext: player.onNext,
     onPrevious: player.onPrevious,
@@ -94,18 +96,27 @@ function Bench() {
   };
 
   const component = { cd: "CdPlayer", wheel: "Wheel", cassette: "Cassette", turntable: "Turntable", radio: "Radio" }[deck];
-  const code = `<${component}
-  ${deck === "cassette" ? `albumName="${tape.album}"\n  ` : ""}${deck === "wheel" || deck === "cd" ? `trackName="${tape.track}"\n  artist="${tape.artist}"\n  ` : ""}${deck === "cassette" || deck === "turntable" ? `etching="${mark}"` : deck === "cd" ? `badge="${mark} · DIGITAL AUDIO"` : `brand="${mark}"`}
-  style={{ "--rd-body": "${body}" }}
-  …
-/>`;
+  // El snippet muestra solo lo que este banco cambia, con la misma lógica que
+  // las props de arriba: sin marca, cada aparato vuelve a su default.
+  const lines = [
+    deck === "cassette" && `albumName="${tape.album}"`,
+    deck !== "cassette" && deck !== "turntable" && `trackName="${tape.track}"\n  artist="${tape.artist}"`,
+    mark && (deck === "cassette" || deck === "turntable") && `etching="${mark}"`,
+    mark && deck === "cd" && `badge="${mark} · DIGITAL AUDIO"`,
+    mark && deck !== "cd" && `brand="${mark}"`,
+    stickers && `stickers={["/smile.svg", "/star.svg"]}`,
+    `style={{ "--rd-body": "${body}" }}`,
+    "…",
+  ].filter(Boolean);
+  const code = `<${component}\n  ${lines.join("\n  ")}\n/>`;
 
   return (
     <section className="bench">
       <h2>Make your own</h2>
       <p>
         Write a record, pick a chassis, paint that one only. <code>style</code> and <code>className</code> land on the
-        chassis, so one player can break from the page palette without a second stylesheet.
+        chassis, so one player can break from the page palette without a second stylesheet. <code>stickers</code> takes
+        any image URLs and slaps them on with a die-cut white edge, wherever they'd go on that machine.
       </p>
 
       <div className="bench__grid">
@@ -160,6 +171,10 @@ function Bench() {
           <label className="bench__field bench__field--row">
             Plastic
             <input type="color" value={body} onChange={(e) => setBody(e.target.value)} aria-label="This chassis only" />
+          </label>
+          <label className="bench__field bench__field--row">
+            Stickers
+            <input type="checkbox" checked={stickers} onChange={(e) => setStickers(e.target.checked)} />
           </label>
 
           <button className="bench__load" type="submit">
@@ -378,14 +393,17 @@ function Demo() {
         <h2>Two variables paint all five</h2>
         <p>
           Every chassis mixes its colour from <code>--rd-body</code> and <code>--rd-accent</code>, each in its own
-          material: saturated plastic, dark lacquer, brushed aluminium. Set them anywhere above the player.
+          material: saturated plastic, dark lacquer, brushed aluminium, tinted graphite. Set them anywhere above the
+          player.
         </p>
         <Snippet code={`.app { --rd-body: #9e2f2a; --rd-accent: #5ec98b; }`} />
       </section>
 
       <footer className="foot">
         <span>MIT</span>
-        <span>Built out of Radiostatio, a Spotify player with retro cases.</span>
+        <span>
+          Built out of <a href="https://radiostatio.vercel.app">Radiostatio</a>, a Spotify player with retro cases.
+        </span>
       </footer>
 
       <div className="panel">

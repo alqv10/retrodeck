@@ -101,10 +101,12 @@
   position: relative;
   height: 15px;
   margin-top: 9px;
-  /* Las rayitas finas entre número y número, a lo largo del tramo útil */
+  /* Las rayitas finas entre número y número, a lo largo del tramo útil
+     (START y SPAN de Radio.tsx). El % de background-position se mide sobre lo
+     que sobra, no sobre el ancho: 16 / (100 - 62) ≈ 42. */
   background-image: repeating-linear-gradient(90deg, rgba(190, 215, 230, 0.45) 0 1px, transparent 1px 6px);
-  background-position: 14% bottom;
-  background-size: 64% 5px;
+  background-position: 42% bottom;
+  background-size: 62% 5px;
   background-repeat: no-repeat;
 }
 
@@ -159,6 +161,12 @@
 .rd-radio .rd-stickers {
   left: 6px;
   bottom: 3px;
+}
+
+/* Debajo de la escala AM quedan ~24 px de vidrio: a la altura de siempre
+   tapaban el 530 y el 800. */
+.rd-radio .rd-sticker {
+  height: 20px;
 }
 
 /* ---------- La aguja ---------- */

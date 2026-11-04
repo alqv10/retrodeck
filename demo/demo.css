@@ -237,6 +237,13 @@ h1 {
   letter-spacing: 0;
 }
 
+.bench__field input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--rd-accent);
+}
+
 .bench__field input[type="range"] {
   flex: 1;
   accent-color: var(--rd-accent);
@@ -365,13 +372,23 @@ h1 {
     order: 0;
   }
 
+  /* En el teléfono el botón se sube al costado de las muestras: abajo de
+     ellas era una tercera fila y la barra se comía un sexto de la pantalla. */
+  .panel {
+    gap: 8px;
+    padding: 10px 16px;
+  }
+
   .panel__sound {
-    margin-left: 0;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
 /* Vista para grabar: el aparato solo sobre el panel, sin nada alrededor.
-   ?capture=wheel|turntable|cd|cassette, o ?capture a secas para los cuatro. */
+   ?capture=wheel|turntable|cd|cassette|radio, o ?capture a secas para los cinco. */
 .capture {
   min-height: 100vh;
   display: grid;
@@ -387,4 +404,17 @@ h1 {
   border: none;
   background: none;
   padding: 0;
+}
+
+/* En los teléfonos más angostos las muestras achican para dejarle lugar al
+   botón de sonido, que se sube al costado. */
+@media (max-width: 400px) {
+  .panel__swatches {
+    gap: 6px;
+  }
+
+  .swatch {
+    width: 18px;
+    height: 18px;
+  }
 }

@@ -39,8 +39,8 @@ const AM = [530, 800, 1100, 1400, 1700];
 
 // El tramo del vidrio por donde corren los números y la aguja. Lo que queda a
 // los costados es para las etiquetas de banda y de unidad.
-const START = 14;
-const SPAN = 64;
+const START = 16;
+const SPAN = 62;
 
 /** De una fracción (0-1) al porcentaje dentro del tramo útil. */
 function at(fraction: number) {
