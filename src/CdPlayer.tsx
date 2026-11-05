@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { playDiscSpin, playSfx } from "./sfx.ts";
+import { pressFeel, playDiscSpin, playSfx } from "./sfx.ts";
 import { Stickers } from "./Stickers.tsx";
 
 interface CdPlayerProps {
@@ -94,7 +94,7 @@ export function CdPlayer({
   const spinning = !isPaused && phase === "idle";
 
   return (
-    <div className={`rd-cd-player ${className}`} style={style} role="group" aria-label="Discman">
+    <div className={`rd-cd-player ${className}`} style={style} role="group" aria-label="Discman" {...pressFeel}>
       <div className="rd-cd-player__body">
         <div className="rd-cd-player__lcd" aria-live="polite">
           <span className="rd-cd-player__lcd-track">{trackName || "NO DISC"}</span>

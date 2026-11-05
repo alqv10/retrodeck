@@ -44,3 +44,33 @@
     drop-shadow(0 0 1px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.75))
     drop-shadow(0 2px 2px rgba(0, 0, 0, 0.55));
 }
+
+/*
+ * En el teléfono: sin el destello azul del navegador, que tapa la tecla justo
+ * cuando se está hundiendo, y sin seleccionar texto al dejar el dedo apretado.
+ */
+:is(.rd-pocket, .rd-turntable, .rd-cd-player, .rd-cassette, .rd-radio) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:is(.rd-pocket, .rd-turntable, .rd-cd-player, .rd-cassette, .rd-radio) button {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/*
+ * Las teclas chicas se dibujan a escala del aparato, pero el dedo no se achica:
+ * el área de toque crece hacia arriba y abajo, donde no hay otra tecla al lado.
+ */
+@media (pointer: coarse) {
+  :is(.rd-radio__key, .rd-turntable__skip, .rd-turntable__play) {
+    position: relative;
+  }
+
+  :is(.rd-radio__key, .rd-turntable__skip, .rd-turntable__play)::after {
+    content: "";
+    position: absolute;
+    inset: -9px 0;
+  }
+}

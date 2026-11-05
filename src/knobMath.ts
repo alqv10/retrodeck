@@ -13,3 +13,17 @@ export function shortestDelta(from: number, to: number) {
   if (step < -180) step += 360;
   return step;
 }
+
+/**
+ * El tirón de las muescas: alrededor de cada una la perilla se resiste y entre
+ * dos se adelanta, en vez de seguir al dedo como si girara en el aire. Con
+ * strength menor a 1 nunca camina para atrás mientras el dedo avanza.
+ */
+export function detentFeel(angle: number, detent: number, strength = 0.7) {
+  return angle - (detent / (2 * Math.PI)) * strength * Math.sin((2 * Math.PI * angle) / detent);
+}
+
+/** La velocidad que le queda a una perilla suelta después de dt ms de roce. */
+export function coastVelocity(velocity: number, dtMs: number, tauMs: number) {
+  return velocity * Math.exp(-dtMs / tauMs);
+}

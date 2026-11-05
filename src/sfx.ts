@@ -81,6 +81,9 @@ export function playSfx(name: SfxName, { volume = 0.55, from = 0, durationMs }: 
 /** Click seco de la rueda. Sintetizado: un mp3 de 30 ms no vale la descarga. */
 let audioCtx: AudioContext | null = null;
 
+/** Dos clics de una pieza real nunca son iguales: repetidos idénticos suenan a alarma. */
+const vary = (value: number, amount: number) => value * (1 - amount + Math.random() * amount * 2);
+
 export function playTick() {
   if (master === 0) return;
   audioCtx ??= new AudioContext();
@@ -88,8 +91,8 @@ export function playTick() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.type = "square";
-  osc.frequency.value = 1900;
-  gain.gain.setValueAtTime(0.09 * master, now);
+  osc.frequency.value = vary(1900, 0.04);
+  gain.gain.setValueAtTime(vary(0.09, 0.15) * master, now);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
   osc.connect(gain).connect(audioCtx.destination);
   osc.start(now);
@@ -139,7 +142,7 @@ export function playKnob() {
   click.buffer = noiseBuffer(ctx, 0.02);
   const clickFilter = ctx.createBiquadFilter();
   clickFilter.type = "bandpass";
-  clickFilter.frequency.value = 2600;
+  clickFilter.frequency.value = vary(2600, 0.08);
   clickFilter.Q.value = 1.4;
   const clickGain = ctx.createGain();
   clickGain.gain.setValueAtTime(0.05 * master, now);
@@ -150,7 +153,7 @@ export function playKnob() {
 
   const body = ctx.createOscillator();
   body.type = "triangle";
-  body.frequency.setValueAtTime(320, now);
+  body.frequency.setValueAtTime(vary(320, 0.05), now);
   body.frequency.exponentialRampToValueAtTime(190, now + 0.045);
   const bodyGain = ctx.createGain();
   bodyGain.gain.setValueAtTime(0.055 * master, now);
@@ -159,6 +162,73 @@ export function playKnob() {
   body.start(now);
   body.stop(now + 0.06);
 }
+
+/**
+ * Una tecla de plástico. Bajar es un golpe con cuerpo, porque la tecla llega al
+ * fondo; subir es solo el resorte: más agudo y bastante más bajito.
+ */
+function playPress(release: boolean) {
+  if (master === 0) return;
+  audioCtx ??= new AudioContext();
+  const ctx = audioCtx;
+  const now = ctx.currentTime;
+
+  const click = ctx.createBufferSource();
+  click.buffer = noiseBuffer(ctx, 0.016);
+  const filter = ctx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.value = vary(release ? 3400 : 1900, 0.08);
+  filter.Q.value = 1.1;
+  const clickGain = ctx.createGain();
+  clickGain.gain.setValueAtTime((release ? 0.022 : 0.06) * master, now);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.014);
+  click.connect(filter).connect(clickGain).connect(ctx.destination);
+  click.start(now);
+  click.stop(now + 0.016);
+  if (release) return;
+
+  const body = ctx.createOscillator();
+  body.type = "sine";
+  body.frequency.setValueAtTime(vary(210, 0.05), now);
+  body.frequency.exponentialRampToValueAtTime(110, now + 0.035);
+  const bodyGain = ctx.createGain();
+  bodyGain.gain.setValueAtTime(0.07 * master, now);
+  bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+  body.connect(bodyGain).connect(ctx.destination);
+  body.start(now);
+  body.stop(now + 0.045);
+}
+
+/**
+ * El golpecito en la mano, donde el aparato lo permite (Android sí, iPhone no).
+ * Con el sonido en cero tampoco: quien silenció el aparato no espera que vibre.
+ */
+export function haptic(ms = 8) {
+  if (master > 0) navigator.vibrate?.(ms);
+}
+
+let pressing = false;
+
+/**
+ * Va en el chasis y escucha en captura: así todas las teclas de adentro suenan
+ * y vibran sin que cada una lo pida, incluso las que frenan el evento para que
+ * no arranque el arrastre de la rueda.
+ */
+export const pressFeel = {
+  onPointerDownCapture(e: { target: EventTarget }) {
+    if (!(e.target as Element).closest?.("button")) return;
+    pressing = true;
+    playPress(false);
+    haptic(12);
+  },
+  onPointerUpCapture() {
+    if (pressing) playPress(true);
+    pressing = false;
+  },
+  onPointerCancelCapture() {
+    pressing = false;
+  },
+};
 
 /**
  * Pasar entre emisoras. El ruido blanco plano suena a cinta, así que no alcanza

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { station } from "./dial.ts";
 import { Stickers } from "./Stickers.tsx";
-import { playKnob, playStatic } from "./sfx.ts";
+import { haptic, playKnob, playStatic, pressFeel } from "./sfx.ts";
 import { useRotaryDrag } from "./useRotaryDrag.ts";
 
 interface RadioProps {
@@ -42,6 +42,15 @@ const AM = [530, 800, 1100, 1400, 1700];
 const START = 16;
 const SPAN = 62;
 
+// Lo que gira la perilla por cada punto del dial, y cuánto se corre la aguja
+// dentro de una emisora antes de enganchar la siguiente.
+const KNOB_PER_DIAL = 3.4;
+const NEEDLE_PLAY = 5;
+const KNOB_STEP = 50;
+// Un giro con la mano tarda en volver de Spotify: lo que llega dentro de este
+// tiempo es la emisora que ya se giró, no un cambio que venga de afuera.
+const OWN_TURN_MS = 3000;
+
 /** De una fracción (0-1) al porcentaje dentro del tramo útil. */
 function at(fraction: number) {
   return START + fraction * SPAN;
@@ -68,6 +77,10 @@ export function Radio({
 }: RadioProps) {
   const [tuning, setTuning] = useState(false);
   const previousTrack = useRef(trackId);
+  const handTurnAt = useRef(0);
+  // Lo que giró la perilla sola, siguiendo a la emisora cuando el cambio vino
+  // de las teclas o de la lista.
+  const [dialTurn, setDialTurn] = useState(() => at(station(trackId)) * KNOB_PER_DIAL);
 
   // La sintonía se dispara de la canción que ya llegó, no del click: la aguja
   // y la estática arrancan junto con el dato, aunque la red tarde.
@@ -78,16 +91,30 @@ export function Radio({
 
     playStatic(TUNE_MS);
     setTuning(true);
+    if (Date.now() - handTurnAt.current > OWN_TURN_MS) {
+      setDialTurn((turn) => turn + (at(station(trackId)) - at(station(previous))) * KNOB_PER_DIAL);
+    }
     const t = setTimeout(() => setTuning(false), TUNE_MS);
     return () => clearTimeout(t);
   }, [trackId]);
 
-  const { ref, dragging, handlers } = useRotaryDrag({
-    onNext,
-    onPrevious,
-    triggerDegrees: 50,
-    onDetent: playKnob,
+  const { ref, dragging, coasting, angle, rotation, handlers } = useRotaryDrag({
+    onNext: () => {
+      handTurnAt.current = Date.now();
+      onNext();
+    },
+    onPrevious: () => {
+      handTurnAt.current = Date.now();
+      onPrevious();
+    },
+    triggerDegrees: KNOB_STEP,
+    coast: true,
+    onDetent: () => {
+      playKnob();
+      haptic();
+    },
   });
+  const inHand = dragging || coasting;
 
   // La perilla con el teclado. Solo si el foco está en la perilla misma: las
   // teclas de abajo ya responden a Enter por su cuenta.
@@ -102,12 +129,15 @@ export function Radio({
   }
 
   const freq = at(station(trackId));
-  // La perilla sigue a la emisora, no al dedo: el arrastre devuelve un ángulo
-  // relativo que vuelve a cero al soltar, y la marca pegaba un salto al final.
-  const knobAngle = freq * 3.4;
+  // La aguja va atada a la perilla: se corre mientras se gira y recién al llegar
+  // a la muesca de la emisora siguiente salta adonde cae esa.
+  const needle = Math.min(START + SPAN, Math.max(START, freq + ((rotation % KNOB_STEP) / KNOB_STEP) * NEEDLE_PLAY));
+  // Las dos partes se suman y ninguna se pisa: el dedo manda sobre lo que gira
+  // y la emisora solo agrega lo suyo cuando el cambio vino de otro lado.
+  const knobAngle = dialTurn + angle;
 
   return (
-    <div className={`rd-radio ${className}`} style={style} role="group" aria-label={`${brand} radio`}>
+    <div className={`rd-radio ${className}`} style={style} role="group" aria-label={`${brand} radio`} {...pressFeel}>
       <div className="rd-radio__case">
         <div className="rd-radio__face">
           <div className={`rd-radio__dial ${isPaused ? "" : "rd-radio__dial--lit"}`}>
@@ -143,8 +173,8 @@ export function Radio({
             </div>
 
             <span
-              className={`rd-radio__needle ${tuning ? "rd-radio__needle--tuning" : ""}`}
-              style={{ left: `${freq}%` }}
+              className={`rd-radio__needle ${tuning ? "rd-radio__needle--tuning" : inHand ? "rd-radio__needle--held" : ""}`}
+              style={{ left: `${needle}%` }}
               aria-hidden="true"
             />
 
@@ -155,7 +185,7 @@ export function Radio({
 
           <div
             ref={ref}
-            className={`rd-radio__knob ${dragging ? "rd-radio__knob--dragging" : ""}`}
+            className={`rd-radio__knob ${dragging ? "rd-radio__knob--dragging" : ""} ${inHand ? "rd-radio__knob--held" : ""} ${tuning ? "rd-radio__knob--tuning" : ""}`}
             tabIndex={0}
             role="group"
             aria-label="Tuning knob: arrow keys change station, space plays"

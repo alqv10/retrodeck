@@ -185,6 +185,11 @@
   transition: left 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
 }
 
+/* Atada a la perilla: sigue a la mano casi sin retardo */
+.rd-radio__needle--held {
+  transition: left 70ms linear;
+}
+
 /* Mientras barre el dial tiembla, como la aguja de verdad al pasar emisoras */
 .rd-radio__needle--tuning {
   animation: rd-radio-wobble 110ms linear infinite;
@@ -202,6 +207,9 @@
 
 /* ---------- La perilla ---------- */
 
+/* Tres piezas: el metal que gira (estriado y marca), la tapa torneada y la luz.
+   La tapa y la luz no giran porque un torneado concéntrico brilla siempre en el
+   mismo lugar: si el reflejo diera la vuelta con la perilla, se vería pintada. */
 .rd-radio__knob {
   position: relative;
   width: 58px;
@@ -209,59 +217,101 @@
   border-radius: 50%;
   touch-action: none;
   cursor: grab;
-  background: radial-gradient(circle at 34% 26%, #7b8087 0%, #4b4f56 52%, #23262a 100%);
+  background: #1c1e22;
+  /* El hueco en el frente y la sombra hacia abajo a la derecha, de la luz de arriba */
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.26),
-    inset 0 -3px 7px rgba(0, 0, 0, 0.6),
-    0 3px 8px rgba(0, 0, 0, 0.55);
+    0 0 0 2px rgba(0, 0, 0, 0.42),
+    0 0 0 3px rgba(255, 255, 255, 0.07),
+    2px 5px 7px rgba(0, 0, 0, 0.55),
+    4px 10px 16px rgba(0, 0, 0, 0.32);
+  transition: transform 0.2s cubic-bezier(0.3, 1.9, 0.5, 1);
 }
 
 .rd-radio__knob--dragging {
   cursor: grabbing;
+  transform: scale(0.985);
+  transition-duration: 0.05s;
+}
+
+/* La tapa: aluminio torneado, con los dos reflejos cruzados de una pieza redonda */
+.rd-radio__knob::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, rgba(255, 255, 255, 0.03) 0 1px, rgba(0, 0, 0, 0.03) 1px 2px),
+    conic-gradient(
+      from 28deg,
+      #eef0f3 0deg,
+      #9a9ea6 42deg,
+      #62666e 90deg,
+      #a3a7af 138deg,
+      #e4e6ea 180deg,
+      #979ba3 222deg,
+      #5d6169 270deg,
+      #a1a5ad 318deg,
+      #eef0f3 360deg
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.55),
+    0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .rd-radio__knob-face {
-  position: relative;
+  position: absolute;
+  inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
   border-radius: 50%;
-  /* El estriado del canto, que es lo que deja ver que la perilla gira */
-  background: repeating-conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0.14) 0deg 3deg,
-    rgba(0, 0, 0, 0.26) 3deg 6deg
-  );
-  -webkit-mask: radial-gradient(circle, transparent 48%, #000 50%);
-  mask: radial-gradient(circle, transparent 48%, #000 50%);
+  transition: transform 0.18s cubic-bezier(0.3, 1.9, 0.5, 1);
+}
+
+/* Con la mano encima, sin retardo: es el dedo el que la mueve */
+.rd-radio__knob--held .rd-radio__knob-face {
+  transition: none;
+}
+
+.rd-radio__knob--tuning:not(.rd-radio__knob--held) .rd-radio__knob-face {
   transition: transform 620ms cubic-bezier(0.33, 0.9, 0.2, 1);
 }
 
-.rd-radio__knob-notch {
+/* El estriado del canto, que es lo que deja ver que la perilla gira */
+.rd-radio__knob-face::before {
+  content: "";
   position: absolute;
-  top: 2px;
-  left: 50%;
-  width: 4px;
-  height: 15px;
-  margin-left: -2px;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--rd-accent, #e3b765) 88%, #ffffff);
-  box-shadow: 0 0 5px color-mix(in srgb, var(--rd-accent, #e3b765) 55%, transparent);
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, #8d9199 0deg 2.25deg, #17191c 2.25deg 4.5deg);
+  -webkit-mask: radial-gradient(circle, transparent 66%, #000 68%);
+  mask: radial-gradient(circle, transparent 66%, #000 68%);
 }
 
-/* Tapa del centro, para que la perilla tenga fondo y no un disco plano */
+/* La marca cruza del canto a la tapa, para leerla de lejos */
+.rd-radio__knob-notch {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 3px;
+  height: 17px;
+  margin-left: -1.5px;
+  border-radius: 1.5px;
+  background: color-mix(in srgb, var(--rd-accent, #e3b765) 88%, #ffffff);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.55),
+    0 0 5px color-mix(in srgb, var(--rd-accent, #e3b765) 45%, transparent);
+}
+
+/* La luz sobre el estriado: arriba a la izquierda brilla y abajo se apaga */
 .rd-radio__knob::after {
   content: "";
   position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 26px;
-  height: 26px;
+  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 28%, #6a6f76 0%, #3c4046 60%, #202327 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, 0.62) 100%);
+  -webkit-mask: radial-gradient(circle, transparent 66%, #000 68%);
+  mask: radial-gradient(circle, transparent 66%, #000 68%);
   pointer-events: none;
 }
 
@@ -321,20 +371,30 @@
   cursor: pointer;
   color: rgba(255, 255, 255, 0.82);
   background: linear-gradient(180deg, #595e66 0%, #3a3e44 55%, #26292e 100%);
+  /* El 0 2px 0 es el costado de la tecla: al apretarla se esconde adentro */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.24),
-    0 2px 3px rgba(0, 0, 0, 0.45);
+    inset 0 -1px 2px rgba(0, 0, 0, 0.35),
+    0 2px 0 #121316,
+    0 3px 4px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s cubic-bezier(0.3, 1.9, 0.5, 1), box-shadow 0.14s ease;
 }
 
 .rd-radio__key:active {
+  transform: translateY(2px);
   box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 3px rgba(0, 0, 0, 0.55),
+    0 0 0 #121316,
     0 1px 0 rgba(255, 255, 255, 0.08);
+  transition-duration: 0.035s;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rd-radio__needle,
-  .rd-radio__knob-face {
+  .rd-radio__knob,
+  .rd-radio__key,
+  .rd-radio__knob-face,
+  .rd-radio__knob--tuning:not(.rd-radio__knob--held) .rd-radio__knob-face {
     transition: none;
   }
 

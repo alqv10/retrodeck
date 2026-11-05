@@ -1,6 +1,6 @@
 import type { CSSProperties, KeyboardEvent } from "react";
 import { formatRemaining, formatTime } from "./format.ts";
-import { playTick } from "./sfx.ts";
+import { haptic, playTick, pressFeel } from "./sfx.ts";
 import { Stickers } from "./Stickers.tsx";
 import { useRotaryDrag } from "./useRotaryDrag.ts";
 
@@ -41,7 +41,10 @@ export function Wheel({
     onNext,
     onPrevious,
     triggerDegrees: 40,
-    onDetent: playTick,
+    onDetent: () => {
+      playTick();
+      haptic();
+    },
   });
 
   // La rueda con el teclado. Solo cuando el foco está en la rueda misma: los
@@ -58,7 +61,7 @@ export function Wheel({
   }
 
   return (
-    <div className={`rd-pocket ${className}`} style={style} role="group" aria-label={`${brand} player`}>
+    <div className={`rd-pocket ${className}`} style={style} role="group" aria-label={`${brand} player`} {...pressFeel}>
       <div className="rd-pocket__screen">
         <p className="rd-pocket__brand">{brand}</p>
         {/* El live va en el track y el artista, nunca en la pantalla entera:

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { playSfx } from "./sfx.ts";
+import { pressFeel, playSfx } from "./sfx.ts";
 import { Stickers } from "./Stickers.tsx";
 
 interface CassetteProps {
@@ -83,7 +83,7 @@ export function Cassette({
   const reelsSpinning = !isPaused && phase === "idle";
 
   return (
-    <div className={`rd-cassette ${className}`} style={style} role="group" aria-label={`${brand} cassette deck`}>
+    <div className={`rd-cassette ${className}`} style={style} role="group" aria-label={`${brand} cassette deck`} {...pressFeel}>
       <div className="rd-cassette__deck">
         <div className={`rd-cassette__bay ${lidOpen ? "rd-cassette__bay--open" : ""}`}>
           <div className={`rd-cassette__tape rd-cassette__tape--${phase}`}>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { formatRemaining } from "./format.ts";
-import { playSfx } from "./sfx.ts";
+import { pressFeel, playSfx } from "./sfx.ts";
 import { Stickers } from "./Stickers.tsx";
 
 interface TurntableProps {
@@ -54,7 +54,7 @@ export function Turntable({
   }, [isPaused]);
 
   return (
-    <div className={`rd-turntable ${className}`} style={style} role="group" aria-label={`${brand} turntable`}>
+    <div className={`rd-turntable ${className}`} style={style} role="group" aria-label={`${brand} turntable`} {...pressFeel}>
       <span className="rd-turntable__brand" aria-hidden="true">
         {brand}
       </span>

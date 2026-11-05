@@ -113,7 +113,9 @@ the `trackId` hashes to a fixed spot on the dial, so going back lands the needle
 where it was. A new id sweeps the needle across and bursts static while it
 travels: noise through a bandpass that sweeps with it, plus the heterodyne
 whistle of crossing a carrier. The dial lights up while it plays. The knob is the
-wheel's own drag mechanic; it also takes focus, where the arrow keys tune and
+wheel's own drag mechanic with some mass added: it follows the finger, catches on
+each detent, the needle moves with it, and let go with some speed it keeps turning
+for a moment. It also takes focus, where the arrow keys tune and
 space plays.
 
 | prop | type | |
@@ -171,7 +173,8 @@ The cassette and the turntable play short mp3s that ship with the package; the
 wheel's click, the CD motor, the radio's knob and its tuning sweep are synthesised
 with WebAudio, because a 30 ms clip isn't worth the download. Each file gets a
 small pool of players, so the same effect can fire again before the last one has
-finished instead of cutting it. Nothing plays until the user touches
+finished instead of cutting it. Every key clacks on the way down and springs back on the way up, and on phones that
+support it the keys and detents give a short vibration. Nothing plays until the user touches
 something, which is also what browsers require.
 
 ```js
